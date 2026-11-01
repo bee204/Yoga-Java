@@ -1,0 +1,134 @@
+/* Shared readability baseline for public, account and administration screens. */
+:root {
+    font-size: 16px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.55;
+}
+
+body :where(h1, h2, h3, h4, h5, h6) {
+    font-weight: 750 !important;
+    line-height: 1.28 !important;
+}
+
+body :where(strong, b) {
+    font-weight: 750;
+}
+
+body :where(td, [class*='row'], [class*='contact'], [class*='identity']) strong,
+body :where(a, button) strong {
+    font-size: .82rem !important;
+    font-weight: 750 !important;
+    line-height: 1.4 !important;
+}
+
+body .control-column > strong {
+    font-size: .75rem !important;
+}
+
+body :where(p, li, dd) {
+    font-size: .9rem !important;
+    font-weight: 500 !important;
+    line-height: 1.65 !important;
+}
+
+body :where(dt, label) {
+    font-size: .82rem !important;
+    font-weight: 650 !important;
+    line-height: 1.45 !important;
+}
+
+body :where(a, button, input, select, textarea) {
+    font-size: .84rem !important;
+    font-weight: 650 !important;
+    line-height: 1.4 !important;
+}
+
+body :where(input, select, textarea)::placeholder {
+    color: #7b8d87;
+    font-weight: 500;
+    opacity: 1;
+}
+
+body :where(table, th, td) {
+    font-size: .82rem !important;
+    line-height: 1.5 !important;
+}
+
+body th {
+    font-weight: 750 !important;
+}
+
+body td {
+    font-weight: 500 !important;
+}
+
+body small {
+    font-size: .75rem !important;
+    font-weight: 550 !important;
+    line-height: 1.45 !important;
+}
+
+body span:not(:empty):not(:has(> i:only-child)):not(:has(> img:only-child)):not(h1 span):not(h2 span):not(h3 span):not(h4 span):not(h5 span):not(h6 span) {
+    font-size: .8rem !important;
+    font-weight: 550;
+    line-height: 1.4;
+}
+
+body [class*='avatar'] > span {
+    font-size: inherit !important;
+    font-weight: inherit;
+}
+
+body :where(h1, h2, h3, h4, h5, h6) span {
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+}
+
+body :where(
+    [class*='eyebrow'],
+    [class*='badge'],
+    [class*='status'],
+    [class*='meta'],
+    [class*='caption'],
+    [class*='hint'],
+    [class*='subtitle']
+) {
+    font-size: .75rem !important;
+    font-weight: 650 !important;
+    line-height: 1.4 !important;
+}
+
+body :where(.alert, [role='alert'], [role='status']) {
+    font-size: .84rem !important;
+    font-weight: 650 !important;
+    line-height: 1.5 !important;
+}
+
+/* Keep icon-only controls visually balanced after increasing surrounding text. */
+body :where(a, button, span):has(> i:only-child) {
+    line-height: 1 !important;
+}
+
+body :where(a, button, input, select, textarea):focus-visible {
+    outline-width: 3px;
+    outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+    body :where(p, li, dd) {
+        font-size: .875rem !important;
+    }
+
+    body :where(a, button, input, select, textarea, table, th, td) {
+        font-size: .8rem !important;
+    }
+}

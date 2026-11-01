@@ -1,0 +1,10 @@
+package com.yoga.vita.entity;
+import jakarta.persistence.*; import java.math.BigDecimal; import java.time.*;
+@Entity @Table(name="classes") @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+public class YogaClass {
+ @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id; @Column(name="teacher_id") private Long teacherId;
+ private String name; private String lichHoc; private LocalTime startTime; private LocalTime endTime; private LocalDate startDate; private LocalDate endDate; private Integer quantity; private BigDecimal price; private String location; private String description;
+ @Column(name="created_at",updatable=false) private LocalDateTime createdAt; @Column(name="updated_at") private LocalDateTime updatedAt; @Column(name="deleted_at") private LocalDateTime deletedAt;
+ @PrePersist void p(){createdAt=LocalDateTime.now();updatedAt=createdAt;} @PreUpdate void u(){updatedAt=LocalDateTime.now();}
+ public Long getId(){return id;} public void setId(Long v){id=v;} public Long getTeacherId(){return teacherId;} public void setTeacherId(Long v){teacherId=v;} public String getName(){return name;} public void setName(String v){name=v;} public String getLichHoc(){return lichHoc;} public void setLichHoc(String v){lichHoc=v;} public LocalTime getStartTime(){return startTime;} public void setStartTime(LocalTime v){startTime=v;} public LocalTime getEndTime(){return endTime;} public void setEndTime(LocalTime v){endTime=v;} public LocalDate getStartDate(){return startDate;} public void setStartDate(LocalDate v){startDate=v;} public LocalDate getEndDate(){return endDate;} public void setEndDate(LocalDate v){endDate=v;} public Integer getQuantity(){return quantity;} public void setQuantity(Integer v){quantity=v;} public BigDecimal getPrice(){return price;} public void setPrice(BigDecimal v){price=v;} public String getLocation(){return location;} public void setLocation(String v){location=v;} public String getDescription(){return description;} public void setDescription(String v){description=v;}
+}
