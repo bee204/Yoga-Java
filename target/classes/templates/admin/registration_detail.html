@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn đăng ký - VITA Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-shell.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body class="admin-body">
+    <div th:replace="~{layouts/admin_nav :: admin_nav}"></div>
+
+    <main class="admin-main" style="max-width: 800px; margin: 30px auto; padding: 0 20px;">
+        <div style="margin-bottom: 20px;">
+            <a th:href="@{/admin/registrations}" style="color: #10372f; text-decoration: none; font-weight: 600;">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách đăng ký
+            </a>
+        </div>
+
+        <div style="background: white; border-radius: 14px; padding: 35px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); border: 1px solid #e2ece9;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2ece9; padding-bottom: 20px; margin-bottom: 25px;">
+                <div>
+                    <h1 style="color: #10372f; margin: 0; font-size: 24px;" th:text="'Đơn đăng ký #' + ${registration.id}">Đơn #1</h1>
+                    <small style="color: #64748b;" th:text="'Ngày tạo: ' + ${registration.createdAt}">2026-01-01</small>
+                </div>
+                <div>
+                    <span th:if="${registration.status == 'CONFIRMED'}" style="background: #dcfce7; color: #15803d; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px;">ĐÃ DUYỆT</span>
+                    <span th:if="${registration.status == 'PENDING'}" style="background: #fef9c3; color: #854d0e; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px;">CHỜ DUYỆT</span>
+                    <span th:if="${registration.status == 'CANCELLED'}" style="background: #fee2e2; color: #b91c1c; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px;">ĐÃ HỦY</span>
+                </div>
+            </div>
+
+            <!-- Details grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;">
+                <div>
+                    <h3 style="color: #10372f; font-size: 16px; margin: 0 0 12px 0;">Thông tin học viên</h3>
+                    <p style="margin: 0 0 8px 0;"><strong>Họ và tên:</strong> <span th:text="${registration.customer != null ? registration.customer.name : 'Khách vãng lai'}">Tên</span></p>
+                    <p style="margin: 0 0 8px 0;"><strong>Điện thoại:</strong> <span th:text="${registration.customer != null ? registration.customer.phone : 'N/A'}">0900000000</span></p>
+                    <p style="margin: 0 0 8px 0;"><strong>Email:</strong> <span th:text="${registration.customer != null ? registration.customer.email : 'N/A'}">email</span></p>
+                    <p style="margin: 0 0 8px 0;"><strong>Địa chỉ:</strong> <span th:text="${registration.customer != null ? registration.customer.address : 'N/A'}">Địa chỉ</span></p>
+                </div>
+
+                <div>
+                    <h3 style="color: #10372f; font-size: 16px; margin: 0 0 12px 0;">Thông tin khóa học</h3>
+                    <p style="margin: 0 0 8px 0;"><strong>Lớp:</strong> <span th:text="${registration.yogaClass != null ? registration.yogaClass.name : 'N/A'}">Lớp</span></p>
+                    <p style="margin: 0 0 8px 0;"><strong>Lịch học:</strong> <span th:text="${registration.yogaClass != null ? registration.yogaClass.lichHoc : 'N/A'}">T2-T4-T6</span></p>
+                    <p style="margin: 0 0 8px 0;"><strong>Khung giờ:</strong> <span th:text="${registration.yogaClass != null ? registration.yogaClass.startTime + ' - ' + registration.yogaClass.endTime : ''}">06:00</span></p>
+                    <p style="margin: 0 0 8px 0;"><strong>Địa điểm:</strong> <span th:text="${registration.yogaClass != null ? registration.yogaClass.location : 'N/A'}">Phòng</span></p>
+                </div>
+            </div>
+
+            <!-- Pricing summary -->
+            <div style="background: #f8fafc; border-radius: 10px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Thời hạn gói đăng ký:</span>
+                    <strong th:text="${registration.packageMonths + ' tháng'}">1 tháng</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Chiết khấu ưu đãi:</span>
+                    <strong style="color: #16a34a;" th:text="${registration.discount + ' %'}">0 %</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-top: 1px solid #cbd5e1; padding-top: 10px; margin-top: 10px; font-size: 16px;">
+                    <strong>Tổng tiền thanh toán:</strong>
+                    <strong style="color: #15803d; font-size: 20px;" th:text="${#numbers.formatDecimal(registration.finalPrice, 0, 'POINT', 0, 'COMMA') + ' đ'}">500.000 đ</strong>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <form th:if="${registration.status == 'PENDING'}" method="POST" th:action="@{'/admin/registrations/' + ${registration.id} + '/approve'}">
+                    <button type="submit" style="background: #16a34a; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                        <i class="fa-solid fa-check"></i> Duyệt đơn đăng ký
+                    </button>
+                </form>
+                <form th:if="${registration.status == 'PENDING'}" method="POST" th:action="@{'/admin/registrations/' + ${registration.id} + '/reject'}">
+                    <button type="submit" style="background: #e11d48; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                        <i class="fa-solid fa-xmark"></i> Từ chối đơn
+                    </button>
+                </form>
+                <form method="POST" th:action="@{'/admin/registrations/' + ${registration.id} + '/delete'}" onsubmit="return confirm('Bạn có chắc muốn xóa hẳn bản ghi này?');">
+                    <button type="submit" style="background: #64748b; color: white; padding: 10px 16px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                        <i class="fa-regular fa-trash-can"></i> Xóa
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ chi tiết học viên - VITA Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-shell.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body class="admin-body">
+    <div th:replace="~{layouts/admin_nav :: admin_nav}"></div>
+
+    <main class="admin-main" style="max-width: 900px; margin: 30px auto; padding: 0 20px;">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <a th:href="@{/admin/customers}" style="color: #10372f; text-decoration: none; font-weight: 600;">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách học viên
+            </a>
+            <div style="display: flex; gap: 10px;">
+                <a th:href="@{'/admin/customers/' + ${customer.id} + '/edit'}" style="background: #10372f; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px;">
+                    <i class="fa-regular fa-pen-to-square"></i> Chỉnh sửa hồ sơ
+                </a>
+                <form method="POST" th:action="@{'/admin/customers/' + ${customer.id} + '/delete'}" onsubmit="return confirm('Bạn có chắc muốn xóa học viên này?');" style="margin: 0;">
+                    <button type="submit" style="background: #fee2e2; color: #dc2626; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer;">
+                        <i class="fa-regular fa-trash-can"></i> Xóa
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 14px; padding: 35px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); border: 1px solid #e2ece9; margin-bottom: 30px;">
+            <h1 style="color: #10372f; margin: 0 0 15px 0; font-size: 24px;" th:text="${customer.name}">Nguyễn Văn A</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 14px;">
+                <div><strong>Số điện thoại:</strong> <span th:text="${customer.phone}">0900000000</span></div>
+                <div><strong>Email:</strong> <span th:text="${customer.email}">email</span></div>
+                <div><strong>Ngày sinh:</strong> <span th:text="${customer.birthday}">1995-01-01</span></div>
+                <div><strong>Giới tính:</strong> <span th:text="${customer.gender}">Khác</span></div>
+                <div style="grid-column: span 2;"><strong>Địa chỉ:</strong> <span th:text="${customer.address}">Hà Nội</span></div>
+            </div>
+        </div>
+
+        <h2 style="color: #10372f; font-size: 18px; margin-bottom: 15px;">Lịch sử đăng ký khóa học</h2>
+        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e2ece9; color: #64748b;">
+                        <th style="padding: 10px;">Mã đơn</th>
+                        <th style="padding: 10px;">Lớp học</th>
+                        <th style="padding: 10px;">Gói tập</th>
+                        <th style="padding: 10px;">Học phí</th>
+                        <th style="padding: 10px;">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${registrations}" style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 12px 10px; font-weight: 600;" th:text="'#' + ${r.id}">#1</td>
+                        <td style="padding: 12px 10px;" th:text="${r.yogaClass != null ? r.yogaClass.name : 'Lớp Yoga'}">Lớp</td>
+                        <td style="padding: 12px 10px;" th:text="${r.packageMonths + ' tháng'}">1 tháng</td>
+                        <td style="padding: 12px 10px; color: #16a34a; font-weight: 600;" th:text="${#numbers.formatDecimal(r.finalPrice, 0, 'POINT', 0, 'COMMA') + ' đ'}">500.000 đ</td>
+                        <td style="padding: 12px 10px;">
+                            <span th:if="${r.status == 'CONFIRMED'}" style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">ĐÃ DUYỆT</span>
+                            <span th:if="${r.status == 'PENDING'}" style="background: #fef9c3; color: #854d0e; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">CHỜ DUYỆT</span>
+                            <span th:if="${r.status == 'CANCELLED'}" style="background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">ĐÃ HỦY</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

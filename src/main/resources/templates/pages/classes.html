@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lớp học Yoga - VITA Yoga Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/classes.css}">
+    <link rel="stylesheet" th:href="@{/css/login-chooser.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body>
+    <div th:replace="~{components/header :: header}"></div>
+
+    <main>
+        <div class="container">
+            <div th:if="${success}" class="alert alert-success" style="background:#d4edda;color:#155724;padding:12px;margin:15px 0;border-radius:6px;">
+                <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error" style="background:#f8d7da;color:#721c24;padding:12px;margin:15px 0;border-radius:6px;">
+                <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+            </div>
+
+            <div class="classes-page">
+                <header class="classes-hero">
+                    <div class="classes-hero__content">
+                        <span class="classes-eyebrow"><i class="fa-solid fa-leaf" aria-hidden="true"></i> Luyện tập theo cách của bạn</span>
+                        <h1>Tìm lớp học phù hợp<br><span>với nhịp sống của bạn.</span></h1>
+                        <p>Khám phá lịch học, giáo viên Yoga và số chỗ còn lại trước khi bắt đầu hành trình.</p>
+                    </div>
+                    <div class="classes-hero__summary">
+                        <strong th:text="${classes.size()}">0</strong>
+                        <span>Lớp học trong hệ thống</span>
+                        <small>Cập nhật theo dữ liệu hiện tại</small>
+                    </div>
+                </header>
+
+                <section class="classes-toolbar" aria-label="Tìm kiếm lớp học">
+                    <div class="classes-search">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input type="search" id="searchClass" placeholder="Tên lớp, giáo viên Yoga, địa điểm..." onkeyup="filterClasses()">
+                    </div>
+                    <div class="classes-toolbar__meta">
+                        <span id="classResultCount">Đang hiển thị <span th:text="${classes.size()}">0</span> lớp</span>
+                    </div>
+                </section>
+
+                <section class="classes-grid" id="classGrid">
+                    <article th:each="cls, iterStat : ${classes}" 
+                             th:class="'class-card-vita class-card-vita--tone-' + (${iterStat.index % 3} + 1)" 
+                             data-class-card>
+                        <div class="class-card-vita__visual">
+                            <span class="class-card-vita__number" th:text="${cls.id < 10 ? '0' + cls.id : cls.id}">01</span>
+                            <span class="class-card-vita__symbol"><i class="fa-solid fa-spa" aria-hidden="true"></i></span>
+                            <span class="class-state class-state--open" th:if="${cls.availableSlots > 0}">Đang nhận đăng ký</span>
+                            <span class="class-state class-state--full" th:if="${cls.availableSlots <= 0}">Đã đủ chỗ</span>
+                        </div>
+
+                        <div class="class-card-vita__body">
+                            <div class="class-card-vita__title">
+                                <div>
+                                    <span th:text="${cls.teacher != null ? cls.teacher.name : 'Giáo viên VITA'}">Giáo viên</span>
+                                    <h2 th:text="${cls.name}">Tên lớp</h2>
+                                </div>
+                                <a th:href="@{'/classes/' + ${cls.id}}" aria-label="Xem chi tiết">
+                                    <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                                </a>
+                            </div>
+
+                            <p class="class-card-vita__description" th:text="${cls.description}">Mô tả lớp học</p>
+
+                            <p class="class-card-vita__essentials-label">Thông tin quan trọng</p>
+                            <dl class="class-card-vita__schedule">
+                                <div class="class-fact class-fact--schedule">
+                                    <dt><span><i class="fa-regular fa-calendar" aria-hidden="true"></i></span> Lịch học</dt>
+                                    <dd th:text="${cls.lichHoc}">T2-T4-T6</dd>
+                                </div>
+                                <div class="class-fact class-fact--time">
+                                    <dt><span><i class="fa-regular fa-clock" aria-hidden="true"></i></span> Khung giờ</dt>
+                                    <dd><span th:text="${cls.startTime}">06:00</span> - <span th:text="${cls.endTime}">07:15</span></dd>
+                                </div>
+                                <div class="class-fact class-fact--location">
+                                    <dt><span><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span> Địa điểm</dt>
+                                    <dd th:text="${cls.location}">Phòng Sen Vàng</dd>
+                                </div>
+                                <div class="class-fact class-fact--duration">
+                                    <dt><span><i class="fa-regular fa-calendar-check" aria-hidden="true"></i></span> Khóa học</dt>
+                                    <dd><span th:text="${cls.startDate}">2026-01-01</span> – <span th:text="${cls.endDate}">2026-03-31</span></dd>
+                                </div>
+                            </dl>
+
+                            <div class="class-capacity">
+                                <div class="class-capacity__head">
+                                    <span>Sĩ số lớp</span>
+                                    <strong><span th:text="${cls.confirmedCount}">0</span>/<span th:text="${cls.quantity}">20</span> học viên</strong>
+                                </div>
+                                <div class="class-capacity__track">
+                                    <span th:style="'width: ' + (${cls.quantity > 0 ? (cls.confirmedCount * 100 / cls.quantity) : 0}) + '%;'"></span>
+                                </div>
+                                <small th:text="${cls.availableSlots > 0 ? 'Còn ' + cls.availableSlots + ' chỗ trống' : 'Lớp hiện không còn chỗ trống'}"></small>
+                            </div>
+                        </div>
+
+                        <footer class="class-card-vita__footer">
+                            <div class="class-price-vita">
+                                <span class="class-price-vita__icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span>
+                                <div>
+                                    <small>Học phí</small>
+                                    <strong><span th:text="${#numbers.formatDecimal(cls.price, 0, 'POINT', 0, 'COMMA')}">500.000</span><span>đ/tháng</span></strong>
+                                </div>
+                            </div>
+                            <div class="class-card-vita__actions">
+                                <a th:href="@{'/classes/' + ${cls.id}}" class="class-action class-action--secondary">Chi tiết</a>
+                                <span th:if="${registrationStatuses != null and registrationStatuses.containsKey(cls.id)}" 
+                                      class="class-action class-action--disabled" 
+                                      th:text="${registrationStatuses.get(cls.id).get('status') == 'CONFIRMED' ? 'Đã được duyệt' : 'Chờ duyệt'}">
+                                    Chờ duyệt
+                                </span>
+                                <a th:if="${(registrationStatuses == null or !registrationStatuses.containsKey(cls.id)) and cls.availableSlots > 0}"
+                                   th:href="@{'/register?class_id=' + ${cls.id}}" class="class-action class-action--primary">Đăng ký</a>
+                                <span th:if="${(registrationStatuses == null or !registrationStatuses.containsKey(cls.id)) and cls.availableSlots <= 0}"
+                                      class="class-action class-action--disabled">Hết chỗ</span>
+                            </div>
+                        </footer>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{components/footer :: footer}"></div>
+
+    <script>
+    function filterClasses() {
+        var query = document.getElementById('searchClass').value.toLowerCase();
+        var cards = document.querySelectorAll('[data-class-card]');
+        var count = 0;
+        cards.forEach(function(card) {
+            var text = card.textContent.toLowerCase();
+            if (text.includes(query)) {
+                card.style.display = 'flex';
+                count++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        document.getElementById('classResultCount').innerText = 'Đang hiển thị ' + count + ' lớp';
+    }
+    </script>
+</body>
+</html>

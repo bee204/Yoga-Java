@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý lớp học Yoga - VITA Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-shell.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body class="admin-body">
+    <div th:replace="~{layouts/admin_nav :: admin_nav}"></div>
+
+    <main class="admin-main" style="max-width: 1200px; margin: 30px auto; padding: 0 20px;">
+        <div th:if="${success}" class="alert alert-success" style="background:#d4edda;color:#155724;padding:12px;margin:15px 0;border-radius:6px;">
+            <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <div>
+                <h1 style="color: #10372f; margin: 0 0 5px 0; font-size: 24px;">Danh sách lớp học Yoga</h1>
+                <p style="color: #64748b; margin: 0; font-size: 14px;">Quản lý lịch học, giáo viên phụ trách và sĩ số học viên.</p>
+            </div>
+            <a th:href="@{/admin/classes/create}" style="background: #10372f; color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+                <i class="fa-solid fa-plus"></i> Tạo lớp học mới
+            </a>
+        </div>
+
+        <!-- Filter Bar for Classes -->
+        <div style="background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #e2ece9; margin-bottom: 20px;">
+            <form method="GET" th:action="@{/admin/classes}" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin: 0;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; flex: 1; min-width: 280px;">
+                    <div style="position: relative; flex: 1; min-width: 200px;">
+                        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 11px; color: #94a3b8; font-size: 14px;"></i>
+                        <input type="text" name="q" th:value="${q}" placeholder="Tìm theo tên lớp, địa điểm, phòng tập..." 
+                               style="width: 100%; padding: 8px 12px 8px 36px; border: 1px solid #cce3de; border-radius: 8px; font-size: 13.5px; box-sizing: border-box;">
+                    </div>
+                    <select name="teacher_id" style="padding: 8px 12px; border: 1px solid #cce3de; border-radius: 8px; font-size: 13.5px; background: white; color: #334155;">
+                        <option value="">Tất cả giáo viên</option>
+                        <option th:each="t : ${teachers}" th:value="${t.id}" th:text="${t.name}" th:selected="${selectedTeacherId == t.id}">GV</option>
+                    </select>
+                    <select name="lich_hoc" style="padding: 8px 12px; border: 1px solid #cce3de; border-radius: 8px; font-size: 13.5px; background: white; color: #334155;">
+                        <option value="">Tất cả lịch học</option>
+                        <option value="2 - 4 - 6" th:selected="${selectedLichHoc != null and #strings.contains(selectedLichHoc, '2')}">Thứ 2 - 4 - 6</option>
+                        <option value="3 - 5 - 7" th:selected="${selectedLichHoc != null and #strings.contains(selectedLichHoc, '3')}">Thứ 3 - 5 - 7</option>
+                        <option value="Chủ Nhật" th:selected="${selectedLichHoc != null and #strings.contains(selectedLichHoc, 'Nhật')}">Cuối tuần</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button type="submit" style="background: #10372f; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 13.5px; cursor: pointer;">
+                        <i class="fa-solid fa-filter"></i> Lọc
+                    </button>
+                    <a th:if="${(q != null and !q.isEmpty()) or selectedTeacherId != null or (selectedLichHoc != null and !selectedLichHoc.isEmpty())}" 
+                       th:href="@{/admin/classes}" style="color: #64748b; font-size: 13px; text-decoration: underline; padding: 0 4px;">
+                        Đặt lại
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e2ece9; color: #64748b;">
+                        <th style="padding: 12px 10px;">ID</th>
+                        <th style="padding: 12px 10px;">Tên lớp</th>
+                        <th style="padding: 12px 10px;">Giáo viên</th>
+                        <th style="padding: 12px 10px;">Lịch & Giờ</th>
+                        <th style="padding: 12px 10px;">Sĩ số</th>
+                        <th style="padding: 12px 10px;">Học phí</th>
+                        <th style="padding: 12px 10px; text-align: right;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${classes}" style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 12px 10px; font-weight: 600;" th:text="'#' + ${c.id}">#1</td>
+                        <td style="padding: 12px 10px;">
+                            <strong th:text="${c.name}">Tên lớp</strong>
+                            <div style="font-size: 12px; color: #888;" th:text="${c.location}">Địa điểm</div>
+                        </td>
+                        <td style="padding: 12px 10px;" th:text="${c.teacher != null ? c.teacher.name : 'Chưa phân công'}">GV</td>
+                        <td style="padding: 12px 10px;">
+                            <div th:text="${c.lichHoc}">T2-T4-T6</div>
+                            <div style="font-size: 12px; color: #888;" th:text="${c.startTime + ' - ' + c.endTime}">06:00</div>
+                        </td>
+                        <td style="padding: 12px 10px;">
+                            <strong th:text="${c.confirmedCount + '/' + c.quantity}">0/20</strong>
+                            <span th:if="${c.availableSlots > 0}" style="font-size: 11px; color: #16a34a; display: block;" th:text="'Còn ' + ${c.availableSlots} + ' chỗ'"></span>
+                            <span th:if="${c.availableSlots <= 0}" style="font-size: 11px; color: #dc2626; display: block;">Hết chỗ</span>
+                        </td>
+                        <td style="padding: 12px 10px; color: #16a34a; font-weight: 600;" th:text="${#numbers.formatDecimal(c.price, 0, 'POINT', 0, 'COMMA') + ' đ'}">500.000 đ</td>
+                        <td style="padding: 12px 10px; text-align: right;">
+                            <div style="display: inline-flex; gap: 6px;">
+                                <a th:href="@{'/admin/classes/' + ${c.id}}" title="Xem chi tiết" style="background:#e0f2fe;color:#0284c7;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:12px;"><i class="fa-solid fa-eye"></i></a>
+                                <a th:href="@{'/admin/classes/' + ${c.id} + '/attendance'}" title="Điểm danh" style="background:#e0f2fe;color:#0284c7;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:12px;"><i class="fa-solid fa-clipboard-user"></i></a>
+                                <a th:href="@{'/admin/classes/' + ${c.id} + '/reviews'}" title="Đánh giá" style="background:#fef3c7;color:#d97706;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:12px;"><i class="fa-solid fa-star"></i></a>
+                                <a th:href="@{'/admin/classes/' + ${c.id} + '/edit'}" title="Chỉnh sửa" style="background:#f1f5f9;color:#334155;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:12px;"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <form method="POST" th:action="@{'/admin/classes/' + ${c.id} + '/delete'}" onsubmit="return confirm('Bạn có chắc muốn xóa lớp học này?');" style="margin:0;">
+                                    <button type="submit" title="Xóa" style="background:#fee2e2;color:#dc2626;border:none;padding:6px 10px;border-radius:5px;cursor:pointer;font-size:12px;"><i class="fa-regular fa-trash-can"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

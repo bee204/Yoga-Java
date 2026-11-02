@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="admin_nav">
+    <nav class="admin-nav" aria-label="Điều hướng quản trị" style="background: #10372f; padding: 12px 25px; color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.15);">
+        <div style="max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <!-- Brand / Logo -->
+            <div style="display: flex; align-items: center; gap: 28px;">
+                <!-- If Admin -->
+                <a th:if="${currentUser == null || currentUser.role == 'admin' || currentUser.role == 'ADMIN'}" th:href="@{/admin/dashboard}" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 9px;">
+                    <span style="width: 32px; height: 32px; background: rgba(74, 222, 128, 0.2); border: 1px solid rgba(74, 222, 128, 0.4); border-radius: 8px; display: grid; place-items: center;">
+                        <i class="fa-solid fa-shield-halved" style="color: #4ade80; font-size: 15px;"></i>
+                    </span>
+                    <div>
+                        <strong style="font-size: 15px; letter-spacing: 0.05em; display: block; line-height: 1.2;">VITA CONTROL</strong>
+                        <small style="color: #86efac; font-size: 11px; text-transform: uppercase; font-weight: 700;">Quản Trị Hệ Thống</small>
+                    </div>
+                </a>
+
+                <!-- If Teacher -->
+                <a th:if="${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER')}" th:href="@{/teacher/dashboard}" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 9px;">
+                    <span style="width: 32px; height: 32px; background: rgba(254, 243, 199, 0.2); border: 1px solid rgba(253, 224, 71, 0.4); border-radius: 8px; display: grid; place-items: center;">
+                        <i class="fa-solid fa-person-chalkboard" style="color: #fde047; font-size: 15px;"></i>
+                    </span>
+                    <div>
+                        <strong style="font-size: 15px; letter-spacing: 0.05em; display: block; line-height: 1.2;">VITA TEACHER</strong>
+                        <small style="color: #fef08a; font-size: 11px; text-transform: uppercase; font-weight: 700;">Cổng Giảng Dạy</small>
+                    </div>
+                </a>
+
+                <!-- Navigation Links for Admin -->
+                <div th:if="${currentUser == null || currentUser.role == 'admin' || currentUser.role == 'ADMIN'}" style="display: flex; gap: 6px; align-items: center;">
+                    <a th:href="@{/admin/dashboard}" style="color: #e2ece9; text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-chart-line" style="color: #86efac;"></i> Tổng quan
+                    </a>
+                    <a th:href="@{/admin/registrations}" style="color: #e2ece9; text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-file-alt" style="color: #93c5fd;"></i> Đơn đăng ký
+                    </a>
+                    <a th:href="@{/admin/classes}" style="color: #e2ece9; text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-spa" style="color: #fbcfe8;"></i> Lớp Yoga
+                    </a>
+                    <a th:href="@{/admin/customers}" style="color: #e2ece9; text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-users" style="color: #fed7aa;"></i> Học viên
+                    </a>
+                    <a th:href="@{/admin/teachers}" style="color: #e2ece9; text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-chalkboard-teacher" style="color: #fde047;"></i> Giáo viên
+                    </a>
+                </div>
+
+                <!-- Navigation Links for Teacher -->
+                <div th:if="${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER')}" style="display: flex; gap: 10px; align-items: center;">
+                    <a th:href="@{/teacher/dashboard}" style="color: white; background: rgba(255,255,255,0.15); text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 6px 14px; border-radius: 6px; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-calendar-check" style="color: #4ade80;"></i> Lớp Yoga phụ trách
+                    </a>
+                </div>
+            </div>
+
+            <!-- User Info & Action -->
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Identity badge -->
+                <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.12);">
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background: #4ade80; color: #10372f; display: grid; place-items: center; font-weight: 700; font-size: 13px;">
+                        <span th:text="${currentUser != null ? #strings.substring(currentUser.name != null ? currentUser.name : currentUser.userName, 0, 1) : 'A'}">A</span>
+                    </div>
+                    <div style="line-height: 1.2;">
+                        <strong style="font-size: 13px; color: white; display: block;" th:text="${currentUser != null ? (currentUser.name != null ? currentUser.name : currentUser.userName) : 'Quản trị viên'}">Admin</strong>
+                        <small style="font-size: 10.5px; color: #86efac; text-transform: uppercase; font-weight: 700;" th:text="${currentUser != null ? (currentUser.role == 'admin' ? 'Quản trị viên' : (currentUser.role == 'teacher' ? 'Giáo viên Yoga' : 'Học viên')) : 'Quản trị viên'}">Quản trị viên</small>
+                    </div>
+                </div>
+
+                <a th:if="${currentUser == null || currentUser.role == 'admin' || currentUser.role == 'ADMIN'}" th:href="@{/}" target="_blank" style="color: #cbd5e1; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 5px;" title="Xem trang chủ học viên">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> <span style="display: inline-block;">Website</span>
+                </a>
+
+                <form method="POST" th:action="@{/account/logout}" style="margin: 0;">
+                    <button type="submit" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); padding: 6px 14px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

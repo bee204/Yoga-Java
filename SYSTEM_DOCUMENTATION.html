@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VITA Yoga Java - Sổ Tay Toàn Tập & Hướng Dẫn Vận Hành Hệ Thống</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2310372f'/%3E%3Cpath d='M32 14c-9.9 0-18 8.1-18 18 0 13 18 26 18 26s18-13 18-26c0-9.9-8.1-18-18-18z' fill='%234ade80'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary: #10372f;
+    --primary-light: #185246;
+    --accent: #22c55e;
+    --accent-soft: #dcfce7;
+    --accent-hover: #16a34a;
+    --bg-page: #f8fafc;
+    --surface: #ffffff;
+    --border: #cbd5e1;
+    --border-dark: #94a3b8;
+    --text-main: #0f172a;
+    --text-muted: #334155;
+    --text-light: #64748b;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --info: #0284c7;
+    --radius: 12px;
+    --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 10px 30px -4px rgba(15, 23, 42, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* TOP HEADER BANNER */
+  .doc-header {
+    background: linear-gradient(135deg, #092620 0%, #10372f 60%, #164e43 100%);
+    color: #ffffff;
+    padding: 35px 24px 30px;
+    border-bottom: 3px solid var(--accent);
+  }
+  .doc-header-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+  .doc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(34, 197, 94, 0.18);
+    color: #86efac;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+  }
+  .doc-title {
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+  .doc-subtitle {
+    font-size: 15px;
+    color: #cbd5e1;
+    max-width: 860px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .doc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+  .doc-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #e2e8f0;
+  }
+  .doc-meta span i { color: #4ade80; }
+
+  /* TABS CONTAINER */
+  .doc-nav-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background: #ffffff;
+    border-bottom: 2px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .doc-nav {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    padding: 0 16px;
+    scrollbar-width: thin;
+  }
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #475569;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  .tab-btn:hover {
+    color: var(--primary);
+    background: #f1f5f9;
+  }
+  .tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--accent);
+    background: #f0fdf4;
+  }
+  .tab-btn i { font-size: 15px; color: #64748b; }
+  .tab-btn.active i { color: #16a34a; }
+
+  /* MAIN CONTENT AREA */
+  .doc-main {
+    max-width: 1240px;
+    margin: 32px auto 80px;
+    padding: 0 20px;
+  }
+  .tab-pane {
+    display: none;
+    animation: fadeIn 0.25s ease-in-out;
+  }
+  .tab-pane.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CARDS & GRIDS */
+  .card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+  .card-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 24px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  /* STEPS LIST FOR BEGINNERS */
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .step-item {
+    display: flex;
+    gap: 16px;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: var(--primary);
+    color: #ffffff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .step-content { flex: 1; }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* CODE BOX */
+  .code-block {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 10px 0;
+    border: 1px solid #334155;
+  }
+  .code-block code { color: inherit; }
+  .code-comment { color: #94a3b8; }
+  .code-cmd { color: #38bdf8; font-weight: bold; }
+  .code-val { color: #fde047; }
+
+  /* MOCKUP & REAL SCREENSHOT FRAMES */
+  .screenshot-frame {
+    background: #ffffff;
+    border: 2px solid #94a3b8;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    margin: 20px 0 28px;
+  }
+  .browser-bar {
+    background: #0f172a;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #334155;
+  }
+  .browser-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .browser-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #10b981; }
+  .browser-address {
+    background: #1e293b;
+    color: #f1f5f9;
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: monospace;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid #334155;
+  }
+  .screenshot-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .screenshot-caption {
+    background: #f8fafc;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid #e2e8f0;
+  }
+  .screenshot-caption b { color: #0369a1; }
+
+  /* TABLES */
+  .table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+  }
+  .table-custom th {
+    background: #e2e8f0;
+    color: #0f172a;
+    font-size: 13.5px;
+    font-weight: 800;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 2px solid var(--border-dark);
+  }
+  .table-custom td {
+    padding: 12px 14px;
+    font-size: 13px;
+    color: #0f172a;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .table-custom tr:last-child td { border-bottom: none; }
+  .table-custom tr:hover td { background: #f8fafc; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .badge-admin { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  .badge-teacher { background: #fef3c7; color: #92400e; border: 1px solid #fde047; }
+  .badge-student { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+  .badge-confirmed { background: #bbf7d0; color: #14532d; font-weight: 800; }
+  .badge-pending { background: #fef08a; color: #854d0e; font-weight: 800; }
+
+  /* CALLOUT ALERT */
+  .callout {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    line-height: 1.5;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout i { font-size: 18px; margin-top: 2px; }
+  .callout-info { background: #eff6ff; color: #1e40af; border-left: 4px solid #3b82f6; }
+  .callout-success { background: #f0fdf4; color: #166534; border-left: 4px solid #22c55e; }
+  .callout-warning { background: #fffbeb; color: #92400e; border-left: 4px solid #f59e0b; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .doc-title { font-size: 22px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .tab-btn { padding: 12px 14px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER BANNER -->
+<header class="doc-header">
+  <div class="doc-header-inner">
+    <div class="doc-badge"><i class="fa-solid fa-leaf"></i> VITA Yoga Platform · Java Edition</div>
+    <h1 class="doc-title">Tài Liệu Hướng Dẫn Cài Đặt, Cấu Hình & Vận Hành Hệ Thống</h1>
+    <p class="doc-subtitle">Sổ tay chi tiết dành cho người mới bắt đầu, học viên, giáo viên và quản trị viên về kiến trúc, các luồng nghiệp vụ cốt lõi kèm hình ảnh chụp trực quan từ hệ thống.</p>
+    <div class="doc-meta">
+      <span><i class="fa-solid fa-code"></i> Java 17 LTS / Spring Boot 3.4.11</span>
+      <span><i class="fa-solid fa-database"></i> MySQL 8.x & H2 Memory</span>
+      <span><i class="fa-solid fa-shield-halved"></i> Spring Security 6 RBAC</span>
+      <span><i class="fa-solid fa-layer-group"></i> Thymeleaf SSR + Bootstrap</span>
+    </div>
+  </div>
+</header>
+
+<!-- INTERACTIVE NAVIGATION TABS -->
+<div class="doc-nav-wrapper">
+  <nav class="doc-nav" role="tablist">
+    <button type="button" class="tab-btn active" onclick="switchTab(event, 'tab-install')">
+      <i class="fa-solid fa-rocket"></i> 1. Cài Đặt & Cấu Hình
+    </button>
+    <button type="button" class="tab-btn" onclick="switchTab(event, 'tab-student')">
+      <i class="fa-solid fa-person-running"></i> 2. Cổng Học Viên
+    </button>
+    <button type="button" class="tab-btn" onclick="switchTab(event, 'tab-teacher')">
+      <i class="fa-solid fa-person-chalkboard"></i> 3. Cổng Giáo Viên
+    </button>
+    <button type="button" class="tab-btn" onclick="switchTab(event, 'tab-admin')">
+      <i class="fa-solid fa-shield-halved"></i> 4. Cổng Quản Trị (Admin)
+    </button>
+    <button type="button" class="tab-btn" onclick="switchTab(event, 'tab-flows')">
+      <i class="fa-solid fa-diagram-project"></i> 5. Quy Trình & Logic Nghiệp Vụ
+    </button>
+    <button type="button" class="tab-btn" onclick="switchTab(event, 'tab-schema')">
+      <i class="fa-solid fa-database"></i> 6. CSDL & Kiến Trúc Mã Nguồn
+    </button>
+    <button type="button" class="tab-btn" onclick="switchTab(event, 'tab-test')">
+      <i class="fa-solid fa-vial-circle-check"></i> 7. Kiểm Thử Tự Động (37/37 PASS)
+    </button>
+  </nav>
+</div>
+
+<!-- MAIN TABS CONTAINER -->
+<main class="doc-main">
+
+  <!-- ========================================== -->
+  <!-- TAB 1: CÀI ĐẶT & CẤU HÌNH (DÀNH CHO NGƯỜI MỚI) -->
+  <!-- ========================================== -->
+  <div id="tab-install" class="tab-pane active">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-play"></i></div>
+        <div>
+          <h2 class="card-title">Hướng Dẫn Cài Đặt & Khởi Chạy Từng Bước Dành Cho Người Mới</h2>
+          <p style="font-size:13px; color:#64748b;">Chỉ cần làm đúng theo 5 bước dưới đây là hệ thống sẽ chạy 100% trên máy của bạn.</p>
+        </div>
+      </div>
+
+      <div class="step-list">
+        <!-- Bước 1 -->
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3 class="step-title">Kiểm tra Môi Trường Java (JDK 17) & Maven</h3>
+            <p class="step-desc">Mở cửa sổ <b>PowerShell</b> hoặc <b>Command Prompt</b> và kiểm tra phiên bản:</p>
+            <div class="code-block">
+              <code><span class="code-comment"># Kiểm tra Java (yêu cầu Java 17 trở lên):</span>
+<span class="code-cmd">java -version</span>
+<span class="code-comment"># Kết quả: openjdk version "17.0.21" ...</span>
+
+<span class="code-comment"># Kiểm tra Apache Maven (yêu cầu Maven 3.8+):</span>
+<span class="code-cmd">mvn -version</span>
+<span class="code-comment"># Kết quả: Apache Maven 3.9.9 ...</span></code>
+            </div>
+            <p class="step-desc"><i>* Lưu ý: Nếu báo lệnh không tìm thấy (CommandNotFound), hãy đảm bảo thư mục bin của JDK và Maven đã được thêm vào biến môi trường PATH của Windows.</i></p>
+          </div>
+        </div>
+
+        <!-- Bước 2 -->
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3 class="step-title">Bật MySQL trên XAMPP Control Panel</h3>
+            <p class="step-desc">Mở ứng dụng <b>XAMPP Control Panel</b> trên máy tính của bạn và bấm nút <b>Start</b> ở dòng <b>MySQL</b> (đảm bảo hiển thị cổng 3306 màu xanh lá).</p>
+            <div class="callout callout-info">
+              <i class="fa-solid fa-circle-info"></i>
+              <div>Cơ sở dữ liệu mặc định là <b><code>yoga_management</code></b>. Hệ thống đã được cấu hình cờ tự động tạo database nếu chưa có: <code>createDatabaseIfNotExist=true</code>.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bước 3 -->
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3 class="step-title">Kiểm tra File Cấu Hình Database (application.properties)</h3>
+            <p class="step-desc">File cấu hình nằm tại đường dẫn: <code>src/main/resources/application.properties</code>:</p>
+            <div class="code-block">
+              <code><span class="code-comment"># Cổng chạy ứng dụng</span>
+<span class="code-cmd">server.port</span>=<span class="code-val">8080</span>
+
+<span class="code-comment"># Kết nối MySQL XAMPP</span>
+<span class="code-cmd">spring.datasource.url</span>=<span class="code-val">jdbc:mysql://127.0.0.1:3306/yoga_management?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8</span>
+<span class="code-cmd">spring.datasource.username</span>=<span class="code-val">root</span>
+<span class="code-cmd">spring.datasource.password</span>=
+<span class="code-cmd">spring.jpa.hibernate.ddl-auto</span>=<span class="code-val">update</span></code>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bước 4 -->
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3 class="step-title">Khởi Chạy Ứng Dụng Bằng Lệnh Maven</h3>
+            <p class="step-desc">Tại thư mục gốc của dự án (<code>C:\Users\vuduy\Documents\Project\Yoga-Java</code>), gõ lệnh sau:</p>
+            <div class="code-block">
+              <code><span class="code-comment"># Khởi chạy dự án Spring Boot:</span>
+<span class="code-cmd">mvn spring-boot:run</span></code>
+            </div>
+            <div class="callout callout-success">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><b>Cơ chế Tự Động Nạp Dữ Liệu (Auto Seeder):</b> Lớp <code>DataInitializer</code> sẽ tự động phát hiện nếu database rỗng để tạo sẵn tài khoản Admin, 5 Giáo viên, 8 Lớp học và các đơn đăng ký mẫu ngay trong lần chạy đầu tiên.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bước 5 -->
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3 class="step-title">Mở Trình Duyệt & Trải Nghiệm</h3>
+            <p class="step-desc">Mở trình duyệt bất kỳ (Chrome, Edge, Firefox) và truy cập:</p>
+            <ul style="margin: 8px 0 0 20px; font-size: 13.5px; line-height: 1.8;">
+              <li>Cổng người dùng: <a href="http://localhost:8080/" target="_blank" style="color:#0284c7; font-weight:700;">http://localhost:8080/</a></li>
+              <li>Cổng quản trị viên: <a href="http://localhost:8080/admin/login" target="_blank" style="color:#0284c7; font-weight:700;">http://localhost:8080/admin/login</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BẢNG TÀI KHOẢN MẪU -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-key"></i></div>
+        <div>
+          <h2 class="card-title">Danh Sách Tài Khoản Mẫu Đã Cấu Hình Sẵn</h2>
+          <p style="font-size:13px; color:#64748b;">Tất cả tài khoản đều dùng mật khẩu mặc định là: <b>123456</b></p>
+        </div>
+      </div>
+
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>Vai trò</th>
+            <th>Tên đăng nhập</th>
+            <th>Email</th>
+            <th>Mật khẩu</th>
+            <th>Cổng truy cập & Chức năng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-admin">ROLE_ADMIN</span></td>
+            <td><b>admin</b></td>
+            <td><code>admin@vitayoga.vn</code></td>
+            <td><code>123456</code></td>
+            <td>Cổng quản trị <code>/admin/login</code>: Quản lý toàn bộ lớp học, giáo viên, duyệt đơn và điểm danh.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-teacher">ROLE_TEACHER</span></td>
+            <td><b>teacher1</b></td>
+            <td><code>camtu@vitayoga.vn</code></td>
+            <td><code>123456</code></td>
+            <td>Cổng giáo viên: HLV Nguyễn Thị Cẩm Tú, vào <code>/teacher/dashboard</code> xem lớp phụ trách và điểm danh.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-teacher">ROLE_TEACHER</span></td>
+            <td><b>teacher2</b></td>
+            <td><code>thuhuong@vitayoga.vn</code></td>
+            <td><code>123456</code></td>
+            <td>Cổng giáo viên: HLV Nguyễn Thị Thu Hương phụ trách các lớp Vinyasa Flow.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-student">ROLE_CUSTOMER</span></td>
+            <td><b>student1</b></td>
+            <td><code>an.nguyen@gmail.com</code></td>
+            <td><code>123456</code></td>
+            <td>Cổng học viên <code>/account/login</code>: Đã có lớp học xác nhận (CONFIRMED), có thể viết review đánh giá.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-student">ROLE_CUSTOMER</span></td>
+            <td><b>student2</b></td>
+            <td><code>mai.tran@gmail.com</code></td>
+            <td><code>123456</code></td>
+            <td>Cổng học viên <code>/account/login</code>: Đã có đơn học đang chờ duyệt (PENDING).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 2: CỔNG HỌC VIÊN (USER PORTAL) -->
+  <!-- ========================================== -->
+  <div id="tab-student" class="tab-pane">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#e0f2fe; color:#0369a1;"><i class="fa-solid fa-person-running"></i></div>
+        <div>
+          <h2 class="card-title">1. Trang Chủ & Khám Phá Trung Tâm (Public Website)</h2>
+          <p style="font-size:13px; color:#64748b;">URL: <code>http://localhost:8080/</code></p>
+        </div>
+      </div>
+      
+      <div class="grid-2" style="margin-bottom: 24px;">
+        <div>
+          <h3 style="font-size:15px; color:#10372f; margin-bottom:8px;"><i class="fa-solid fa-door-open"></i> Giao Diện Đăng Nhập Học Viên</h3>
+          <p style="font-size:13px; color:#334155; margin-bottom:10px;">Giao diện thiết kế tinh tế với biểu tượng lá sen VITA, trường mật khẩu có nút ẩn/hiện và chuyển hướng theo vai trò.</p>
+          <div class="screenshot-frame">
+            <div class="browser-bar">
+              <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+              <div class="browser-address">http://localhost:8080/account/login</div>
+            </div>
+            <img class="screenshot-img" src="docs/screenshots/account_login.png" alt="Đăng nhập học viên">
+            <div class="screenshot-caption">
+              <i class="fa-solid fa-camera"></i> <b>Hình 2.0:</b> Đăng nhập tài khoản học viên (Student Login).
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="font-size:15px; color:#10372f; margin-bottom:8px;"><i class="fa-solid fa-compass"></i> Trang Chủ & Giới Thiệu</h3>
+          <p style="font-size:13px; color:#334155; margin-bottom:10px;">Thống kê thời gian thực từ CSDL, thông điệp sức khỏe và danh mục các khóa học nổi bật đang tuyển sinh.</p>
+          <div class="screenshot-frame">
+            <div class="browser-bar">
+              <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+              <div class="browser-address">http://localhost:8080/</div>
+            </div>
+            <img class="screenshot-img" src="docs/screenshots/home.png" alt="Ảnh chụp thực tế Trang chủ">
+            <div class="screenshot-caption">
+              <i class="fa-solid fa-camera"></i> <b>Hình 2.1:</b> Trang chủ VITA với phong cách thiết kế tươi sáng.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-spa"></i></div>
+          <h2 class="card-title">2. Danh Mục Lớp Học</h2>
+        </div>
+        <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Học viên có thể xem lịch tập, phòng học, học phí và số chỗ còn trống theo thời gian thực.</p>
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/classes</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/classes.png" alt="Danh sách lớp học">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 2.2:</b> Danh sách 8 lớp học đa dạng trường phái (Hatha, Vinyasa, Yin, Ashtanga).
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-user-tie"></i></div>
+          <h2 class="card-title">3. Đội Ngũ Giảng Viên</h2>
+        </div>
+        <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Tra cứu tiểu sử, số năm kinh nghiệm giảng dạy và các lớp phụ trách của từng HLV.</p>
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/teachers</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/teachers.png" alt="Đội ngũ giáo viên">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 2.3:</b> Hồ sơ 5 giáo viên Yoga tiêu biểu kèm số năm kinh nghiệm thực tế.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-id-card"></i></div>
+          <h2 class="card-title">4. Hồ Sơ Cá Nhân & Đổi Mật Khẩu (Zen Forest UI)</h2>
+        </div>
+        <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Cập nhật thông tin liên hệ, số điện thoại, đổi mật khẩu và xem tổng số khóa học đã tham gia. Giao diện sidebar phong cách Zen Forest chuẩn màu sắc VITA, không xung đột màu.</p>
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/account — Hồ sơ học viên</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/student_profile.png" alt="Hồ sơ học viên">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 2.4:</b> Màn hình quản lý hồ sơ và đổi mật khẩu an toàn bằng mã hóa BCrypt.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+          <h2 class="card-title">5. Khóa Học Của Tôi & Đánh Giá</h2>
+        </div>
+        <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Theo dõi tiến độ duyệt đơn, hủy đơn khi chưa thanh toán và gửi đánh giá (1-5 sao).</p>
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/registered-classes</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/student_registered_classes.png" alt="Lớp đã đăng ký">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 2.5:</b> Danh sách khóa học của học viên với trạng thái PENDING và CONFIRMED.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGOUT REDIRECT CALLOUT -->
+    <div class="callout callout-info" style="margin-top:20px;">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <div>
+        <b style="color:#0369a1; font-size:14px; display:block; margin-bottom:4px;">Cơ Chế Đăng Xuất An Toàn & Điều Hướng Về Trang Chủ (Logout to Dashboard)</b>
+        <p style="font-size:13px; color:#0f172a; margin:0;">Khi học viên, giáo viên hoặc quản trị viên nhấn <b>Đăng xuất</b> tại menu tài khoản hoặc sidebar, hệ thống Spring Security sẽ hủy bỏ hoàn toàn phiên làm việc (`JSESSIONID`), xóa SecurityContext và <b>tự động điều hướng người dùng ra màn hình Trang chủ (Dashboard chính tại `/`)</b> kèm thông báo banner màu xanh thông báo phiên đăng xuất thành công.</p>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 3: CỔNG GIÁO VIÊN (TEACHER WORKSPACE) -->
+  <!-- ========================================== -->
+  <div id="tab-teacher" class="tab-pane">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-person-chalkboard"></i></div>
+        <div>
+          <h2 class="card-title">Không Gian Làm Việc Dành Riêng Cho Giáo Viên Yoga</h2>
+          <p style="font-size:13px; color:#64748b;">URL: <code>http://localhost:8080/teacher/dashboard</code> (Đăng nhập: <code>teacher1</code> / <code>123456</code>)</p>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:20px;">
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px;">
+          <b style="color:#0f172a; font-size:14px; display:block; margin-bottom:6px;"><i class="fa-solid fa-calendar-check" style="color:#15803d;"></i> Lịch Dạy Chuyên Biệt</b>
+          <p style="font-size:13px; color:#475569;">Chỉ hiển thị các lớp học do chính giáo viên đó phụ trách, không bị lẫn lộn giữa các giảng viên khác.</p>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px;">
+          <b style="color:#0f172a; font-size:14px; display:block; margin-bottom:6px;"><i class="fa-solid fa-clipboard-user" style="color:#0284c7;"></i> Điểm Danh Nhanh</b>
+          <p style="font-size:13px; color:#475569;">Lối tắt mở bảng điểm danh từng buổi học để đánh dấu học viên có mặt, vắng mặt hoặc có phép.</p>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px;">
+          <b style="color:#0f172a; font-size:14px; display:block; margin-bottom:6px;"><i class="fa-solid fa-star" style="color:#eab308;"></i> Xem Đánh Giá Của Học Viên</b>
+          <p style="font-size:13px; color:#475569;">Theo dõi số sao và góp ý thực tế của học viên sau các buổi học để cải thiện chất lượng giảng dạy.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+            <h2 class="card-title">Cổng Đăng Nhập Giáo Viên Riêng Biệt</h2>
+          </div>
+          <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Giao diện chia đôi màn hình (Split Layout), nhận diện thương hiệu VITA riêng và hỗ trợ truy cập thẳng Teacher Workspace.</p>
+          <div class="screenshot-frame">
+            <div class="browser-bar">
+              <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+              <div class="browser-address">http://localhost:8080/teacher/login</div>
+            </div>
+            <img class="screenshot-img" src="docs/screenshots/teacher_login.png" alt="Đăng nhập giáo viên">
+            <div class="screenshot-caption">
+              <i class="fa-solid fa-camera"></i> <b>Hình 3.0:</b> Giao diện đăng nhập dành riêng cho Giảng viên (Split 2-Column Layout).
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <h2 class="card-title">Bàn Làm Việc Giảng Viên (Teacher Workspace)</h2>
+          </div>
+          <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Theo dõi danh sách lớp học được phân công giảng dạy, sĩ số lớp và thao tác điểm danh buổi học.</p>
+          <div class="screenshot-frame">
+            <div class="browser-bar">
+              <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+              <div class="browser-address">http://localhost:8080/teacher/dashboard</div>
+            </div>
+            <img class="screenshot-img" src="docs/screenshots/teacher_dashboard.png" alt="Ảnh chụp thực tế Cổng Giáo Viên">
+            <div class="screenshot-caption">
+              <i class="fa-solid fa-camera"></i> <b>Hình 3.1:</b> Bảng điều khiển phân công giảng dạy và điểm danh học viên.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 4: CỔNG QUẢN TRỊ (ADMIN CONTROL CENTER) -->
+  <!-- ========================================== -->
+  <div id="tab-admin" class="tab-pane">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fee2e2; color:#991b1b;"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <h2 class="card-title">Trung Tâm Điều Hành Quản Trị VITA (Admin Control Center)</h2>
+          <p style="font-size:13px; color:#64748b;">Đăng nhập riêng biệt tại: <code>http://localhost:8080/admin/login</code> (Tài khoản: <code>admin</code> / <code>123456</code>)</p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom: 24px;">
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/admin/login — Cổng Đăng Nhập Quản Trị</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/admin_login.png" alt="Đăng nhập quản trị">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 4.0:</b> Màn hình đăng nhập hệ thống quản trị với cơ chế chống rò rỉ dữ liệu.
+          </div>
+        </div>
+
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/admin/dashboard — Dashboard Phân Tích & Biểu Đồ</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/admin_dashboard.png" alt="Ảnh chụp thực tế Admin Dashboard">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 4.1:</b> Dashboard quản trị toàn diện: Tích hợp <b>Bộ lọc thời gian thực</b> (Hôm nay, 7 ngày, 30 ngày, tháng này, khoảng ngày tùy chỉnh), tự động tính doanh thu thực thu, KPIs, biểu đồ SVG tỷ lệ duyệt đơn, tăng trưởng học viên và phân bổ giảng dạy.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN FILTER HIGHLIGHT BANNER -->
+    <div class="callout callout-success" style="margin-bottom:24px;">
+      <i class="fa-solid fa-filter"></i>
+      <div>
+        <b style="color:#15803d; font-size:14px; display:block; margin-bottom:4px;">Hệ Thống Tìm Kiếm & Bộ Lọc Đa Tiêu Chí Mới Trên Tất Cả Màn Hình Quản Trị</b>
+        <p style="font-size:13px; color:#0f172a; margin:0;">
+          • <b>Dashboard:</b> Lọc theo thời gian thực (Hôm nay, 7 ngày, 30 ngày, Tháng này, hoặc chọn khoảng <code>Từ ngày - Đến ngày</code>) cập nhật toàn bộ số liệu thống kê đơn và doanh thu trong kỳ.<br>
+          • <b>Lớp học:</b> Ô tìm kiếm nhanh theo tên lớp, địa điểm, phòng tập + Dropdown lọc theo Giáo viên + Dropdown lọc theo Lịch học.<br>
+          • <b>Giáo viên:</b> Ô tìm kiếm tên, số điện thoại, email + Dropdown lọc theo Số năm kinh nghiệm (Dưới 3 năm, 3-5 năm, Trên 5 năm).<br>
+          • <b>Học viên:</b> Ô tìm kiếm họ tên, số điện thoại, email, địa chỉ + Dropdown lọc theo Giới tính (Nam, Nữ, Khác).
+        </p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-file-signature"></i></div>
+          <h2 class="card-title">1. Duyệt & Quản Lý Đơn Đăng Ký</h2>
+        </div>
+        <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Lọc theo trạng thái (PENDING, CONFIRMED, CANCELLED). Hỗ trợ tạo đơn trực tiếp tại quầy và chỉnh sửa đơn.</p>
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/admin/registrations</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/admin_registrations.png" alt="Quản lý đơn đăng ký">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 4.2:</b> Bảng điều khiển xét duyệt và tạo đơn đăng ký học viên.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-calendar-plus"></i></div>
+          <h2 class="card-title">2. Quản Lý Lớp Học & Sĩ Số (CRUD)</h2>
+        </div>
+        <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Tạo lớp mới, điều chỉnh lịch học, phòng học, học phí và kiểm soát sức chứa an toàn.</p>
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/admin/classes</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/admin_classes.png" alt="Quản lý lớp học">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 4.3:</b> Danh sách quản trị lớp học kèm thông số sĩ số và trạng thái chỗ trống.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+          <h2 class="card-title">3. Quản Lý Hồ Sơ Học Viên</h2>
+        </div>
+        <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Theo dõi danh sách toàn bộ học viên, thông tin liên lạc, lịch sử đăng ký khóa học và ghi chú thể lực.</p>
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/admin/customers</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/admin_customers.png" alt="Quản lý học viên">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 4.4:</b> Danh sách hồ sơ học viên, xem chi tiết và tạo mới.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-circle-info"></i></div>
+          <h2 class="card-title">4. Hồ Sơ Vận Hành Chi Tiết Lớp Học</h2>
+        </div>
+        <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Xem tỷ lệ lấp đầy lớp (Occupancy), giáo viên phụ trách và danh sách toàn bộ học viên đã xác nhận.</p>
+        <div class="screenshot-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+            <div class="browser-address">http://localhost:8080/admin/classes/1</div>
+          </div>
+          <img class="screenshot-img" src="docs/screenshots/admin_class_detail.png" alt="Chi tiết lớp học">
+          <div class="screenshot-caption">
+            <i class="fa-solid fa-camera"></i> <b>Hình 4.5:</b> Màn hình hồ sơ vận hành lớp học, đo lường tỷ lệ lấp đầy và danh sách học viên.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-chalkboard-user"></i></div>
+        <h2 class="card-title">5. Hồ Sơ Giảng Viên & Lịch Phân Công (Admin View)</h2>
+      </div>
+      <p style="font-size:13.5px; color:#334155; margin-bottom:12px;">Quản trị viên theo dõi toàn bộ thông tin cá nhân, số năm kinh nghiệm và danh sách các lớp Yoga được phân công cho từng giảng viên.</p>
+      <div class="screenshot-frame">
+        <div class="browser-bar">
+          <div class="browser-dots"><span class="browser-dot dot-red"></span><span class="browser-dot dot-yellow"></span><span class="browser-dot dot-green"></span></div>
+          <div class="browser-address">http://localhost:8080/admin/teachers/1</div>
+        </div>
+        <img class="screenshot-img" src="docs/screenshots/admin_teacher_detail.png" alt="Hồ sơ giáo viên">
+        <div class="screenshot-caption">
+          <i class="fa-solid fa-camera"></i> <b>Hình 4.6:</b> Chi tiết hồ sơ giáo viên, thông tin liên lạc và danh sách lớp phụ trách.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 5: SƠ ĐỒ QUY TRÌNH & LOGIC NGHIỆP VỤ -->
+  <!-- ========================================== -->
+  <div id="tab-flows" class="tab-pane">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#dbeafe; color:#1d4ed8;"><i class="fa-solid fa-diagram-project"></i></div>
+        <div>
+          <h2 class="card-title">Quy Trình Nghiệp Vụ Cốt Lõi (Core Business Flows)</h2>
+          <p style="font-size:13px; color:#64748b;">Mô tả logic vận hành, công thức chiết khấu và cơ chế kiểm soát bảo mật</p>
+        </div>
+      </div>
+
+      <h3 style="color:#0f172a; margin-bottom:12px; font-size:16px;">1. Quy Trình Đăng Ký & Xét Duyệt Học Viên (Registration Flow)</h3>
+      <div style="background:#ffffff; border:2px solid #94a3b8; border-radius:12px; padding:20px; margin-bottom:24px;">
+        <svg viewBox="0 0 960 210" width="100%" height="210" aria-label="Sơ đồ luồng đăng ký">
+          <!-- Step 1 -->
+          <circle cx="120" cy="65" r="30" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3"/>
+          <text x="120" y="73" text-anchor="middle" font-weight="bold" fill="#1e40af" font-size="17">1</text>
+          <text x="120" y="120" text-anchor="middle" font-weight="bold" fill="#0f172a" font-size="13.5">Học Viên Chọn Lớp & Gói</text>
+          <text x="120" y="140" text-anchor="middle" font-weight="600" fill="#334155" font-size="11.5">Gói 1, 3, 6 hoặc 12 tháng</text>
+          <text x="120" y="156" text-anchor="middle" font-weight="600" fill="#334155" font-size="11.5">Kiểm tra sĩ số lớp còn trống</text>
+
+          <path d="M 160 65 L 310 65" stroke="#1d4ed8" stroke-width="3" stroke-dasharray="6 4"/>
+          <polygon points="310,60 320,65 310,70" fill="#1d4ed8"/>
+          <text x="240" y="55" text-anchor="middle" font-weight="bold" fill="#1e40af" font-size="11.5">POST /register</text>
+
+          <!-- Step 2 -->
+          <circle cx="360" cy="65" r="30" fill="#fef3c7" stroke="#b45309" stroke-width="3"/>
+          <text x="360" y="73" text-anchor="middle" font-weight="bold" fill="#92400e" font-size="17">2</text>
+          <text x="360" y="120" text-anchor="middle" font-weight="bold" fill="#0f172a" font-size="13.5">Tạo Đơn PENDING</text>
+          <text x="360" y="140" text-anchor="middle" font-weight="600" fill="#334155" font-size="11.5">Tự động áp dụng chiết khấu</text>
+          <text x="360" y="156" text-anchor="middle" font-weight="600" fill="#334155" font-size="11.5">Chống đăng ký trùng lặp</text>
+
+          <path d="M 400 65 L 550 65" stroke="#b45309" stroke-width="3" stroke-dasharray="6 4"/>
+          <polygon points="550,60 560,65 550,70" fill="#b45309"/>
+          <text x="480" y="55" text-anchor="middle" font-weight="bold" fill="#92400e" font-size="11.5">Admin kiểm tra</text>
+
+          <!-- Step 3 -->
+          <circle cx="600" cy="65" r="30" fill="#dcfce7" stroke="#15803d" stroke-width="3"/>
+          <text x="600" y="73" text-anchor="middle" font-weight="bold" fill="#14532d" font-size="17">3</text>
+          <text x="600" y="120" text-anchor="middle" font-weight="bold" fill="#0f172a" font-size="13.5">Admin Duyệt Đơn</text>
+          <text x="600" y="140" text-anchor="middle" font-weight="600" fill="#334155" font-size="11.5">Kiểm tra sĩ số tối đa</text>
+          <text x="600" y="156" text-anchor="middle" font-weight="600" fill="#334155" font-size="11.5">Cập nhật CONFIRMED</text>
+
+          <path d="M 640 65 L 790 65" stroke="#15803d" stroke-width="3"/>
+          <polygon points="790,60 800,65 790,70" fill="#15803d"/>
+          <text x="720" y="55" text-anchor="middle" font-weight="bold" fill="#14532d" font-size="11.5">CONFIRMED</text>
+
+          <!-- Step 4 -->
+          <circle cx="840" cy="65" r="30" fill="#f3e8ff" stroke="#7e22ce" stroke-width="3"/>
+          <text x="840" y="73" text-anchor="middle" font-weight="bold" fill="#581c87" font-size="17">4</text>
+          <text x="840" y="120" text-anchor="middle" font-weight="bold" fill="#0f172a" font-size="13.5">Vào Lớp & Điểm Danh</text>
+          <text x="840" y="140" text-anchor="middle" font-weight="600" fill="#334155" font-size="11.5">Slot khả dụng trừ 1</text>
+          <text x="840" y="156" text-anchor="middle" font-weight="600" fill="#334155" font-size="11.5">Kích hoạt quyền gửi review</text>
+        </svg>
+      </div>
+
+      <h3 style="color:#0f172a; margin-bottom:10px; font-size:16px;">2. Bảng Công Thức Tính Chiết Khấu Gói Tập</h3>
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>Gói thời gian</th>
+            <th>Mức chiết khấu</th>
+            <th>Công thức tính học phí</th>
+            <th>Ví dụ (Lớp 600.000 VNĐ/tháng)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Gói 1 Tháng</b></td>
+            <td><code>0%</code></td>
+            <td><code>Học phí cơ bản x 1</code></td>
+            <td>600.000 VNĐ</td>
+          </tr>
+          <tr>
+            <td><b>Gói 3 Tháng</b></td>
+            <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">Giảm 5%</span></td>
+            <td><code>(Học phí x 3) x 95%</code></td>
+            <td><b>1.710.000 VNĐ</b> (Tiết kiệm 90.000 đ)</td>
+          </tr>
+          <tr>
+            <td><b>Gói 6 Tháng</b></td>
+            <td><span class="badge" style="background:#fef3c7; color:#b45309;">Giảm 10%</span></td>
+            <td><code>(Học phí x 6) x 90%</code></td>
+            <td><b>3.240.000 VNĐ</b> (Tiết kiệm 360.000 đ)</td>
+          </tr>
+          <tr>
+            <td><b>Gói 12 Tháng (VIP)</b></td>
+            <td><span class="badge badge-student">Giảm 20%</span></td>
+            <td><code>(Học phí x 12) x 80%</code></td>
+            <td><b>5.760.000 VNĐ</b> (Tiết kiệm 1.440.000 đ)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="color:#0f172a; margin: 24px 0 10px; font-size:16px;">3. Các Rào Cản Logic & Bảo Mật Được Gia Cố</h3>
+      <div class="grid-2">
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px;">
+          <b style="color:#15803d; font-size:14px; display:block; margin-bottom:6px;"><i class="fa-solid fa-lock"></i> Chống Lỗ Hổng IDOR (Xác thực quyền sở hữu)</b>
+          <p style="font-size:13px; color:#475569; line-height:1.5;">Tại endpoint <code>/registered-classes/{id}/cancel</code>, hệ thống luôn kiểm tra xem đơn đăng ký có đúng là của học viên đang đăng nhập hay không, ngăn chặn kẻ xấu sửa ID để hủy đơn của người khác.</p>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px;">
+          <b style="color:#b45309; font-size:14px; display:block; margin-bottom:6px;"><i class="fa-solid fa-users-slash"></i> Chống Quá Sĩ Số (Overbooking Prevention)</b>
+          <p style="font-size:13px; color:#475569; line-height:1.5;">Khi học viên đăng ký hoặc khi Admin bấm "Phê duyệt", hệ thống tự động đếm số lượng học viên <code>CONFIRMED</code>. Nếu đã đạt sĩ số tối đa của lớp, hệ thống lập tức chặn lại và báo thông báo rõ ràng.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 6: CƠ SỞ DỮ LIỆU & KIẾN TRÚC MÃ NGUỒN -->
+  <!-- ========================================== -->
+  <div id="tab-schema" class="tab-pane">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#f3e8ff; color:#7e22ce;"><i class="fa-solid fa-database"></i></div>
+        <div>
+          <h2 class="card-title">Cấu Trúc Bảng Dữ Liệu Quan Hệ (MySQL 8.x)</h2>
+          <p style="font-size:13px; color:#64748b;">Mô hình dữ liệu 7 thực thể được quản lý bởi Spring Data JPA & Hibernate</p>
+        </div>
+      </div>
+
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>Bảng (Table)</th>
+            <th>Khóa chính (PK)</th>
+            <th>Khóa ngoại (FK)</th>
+            <th>Ý nghĩa nghiệp vụ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>users</code></td>
+            <td><code>id</code> (BIGINT)</td>
+            <td><code>teacher_id</code>, <code>customer_id</code></td>
+            <td>Lưu thông tin đăng nhập, mật khẩu BCrypt, vai trò (admin, teacher, customer).</td>
+          </tr>
+          <tr>
+            <td><code>teachers</code></td>
+            <td><code>id</code> (BIGINT)</td>
+            <td>-</td>
+            <td>Hồ sơ giảng viên: Họ tên, điện thoại, email, ngày sinh, kinh nghiệm, avatar.</td>
+          </tr>
+          <tr>
+            <td><code>classes</code></td>
+            <td><code>id</code> (BIGINT)</td>
+            <td><code>teacher_id</code></td>
+            <td>Lớp học: Tên lớp, giờ bắt đầu/kết thúc, lịch tập, phòng học, học phí, sĩ số max.</td>
+          </tr>
+          <tr>
+            <td><code>customers</code></td>
+            <td><code>id</code> (BIGINT)</td>
+            <td>-</td>
+            <td>Hồ sơ học viên: Họ tên, số điện thoại, email, địa chỉ, giới tính.</td>
+          </tr>
+          <tr>
+            <td><code>registrations</code></td>
+            <td><code>id</code> (BIGINT)</td>
+            <td><code>customer_id</code>, <code>class_id</code></td>
+            <td>Đơn đăng ký gói tập: Số tháng, chiết khấu, giá cuối, trạng thái (PENDING/CONFIRMED).</td>
+          </tr>
+          <tr>
+            <td><code>attendances</code></td>
+            <td><code>id</code> (BIGINT)</td>
+            <td><code>registration_id</code></td>
+            <td>Sổ điểm danh theo ngày: Ngày tập, trạng thái (PRESENT, ABSENT, EXCUSED).</td>
+          </tr>
+          <tr>
+            <td><code>class_reviews</code></td>
+            <td><code>id</code> (BIGINT)</td>
+            <td><code>class_id</code>, <code>customer_id</code></td>
+            <td>Đánh giá chất lượng: Số sao (1-5), nội dung nhận xét của học viên.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="color:#0f172a; margin: 24px 0 10px; font-size:16px;">Cấu Trúc Thư Mục Dự Án Chuẩn Spring Boot</h3>
+      <div class="code-block">
+        <code>Yoga-Java/
+├── pom.xml                                   <span class="code-comment"># Khai báo thư viện: Spring Boot 3.4.11, JPA, Security, Thymeleaf, MySQL</span>
+├── SYSTEM_DOCUMENTATION.html                 <span class="code-comment"># File tài liệu hướng dẫn tương tác toàn diện (Đang xem)</span>
+├── README.md                                 <span class="code-comment"># Hướng dẫn khởi chạy và danh mục tài khoản</span>
+├── docs/screenshots/                         <span class="code-comment"># Bộ ảnh chụp màn hình thực tế của hệ thống</span>
+└── src/main/
+    ├── java/com/yoga/vita/
+    │   ├── config/DataInitializer.java       <span class="code-comment"># Tự động nạp dữ liệu mẫu khi khởi động</span>
+    │   ├── controller/
+    │   │   ├── WebController.java            <span class="code-comment"># Điều hướng cổng Người dùng (User Portal)</span>
+    │   │   ├── AdminWebController.java       <span class="code-comment"># Điều hướng cổng Quản trị (Admin CRUD)</span>
+    │   │   ├── TeacherWebController.java     <span class="code-comment"># Điều hướng cổng Giáo viên (Teacher Workspace)</span>
+    │   │   └── ApiController.java            <span class="code-comment"># Cung cấp RESTful API cho ứng dụng ngoài</span>
+    │   ├── entity/                           <span class="code-comment"># 7 Thực thể JPA (User, Teacher, Class, Customer,...)</span>
+    │   ├── repository/                       <span class="code-comment"># 7 Interface Spring Data JPA Repository</span>
+    │   └── security/SecurityConfig.java      <span class="code-comment"># Cấu hình bảo mật phân quyền Spring Security 6</span>
+    └── resources/
+        ├── application.properties            <span class="code-comment"># Cấu hình kết nối MySQL XAMPP</span>
+        ├── application-test.properties       <span class="code-comment"># Cấu hình CSDL ảo H2 in-memory</span>
+        ├── static/                           <span class="code-comment"># Tài nguyên tĩnh: CSS, JavaScript, Images</span>
+        └── templates/                        <span class="code-comment"># Giao diện Thymeleaf Server-Side Rendering</span>
+            ├── components/header.html        <span class="code-comment"># Header chung đa vai trò & Login Chooser Modal</span>
+            ├── layouts/admin_nav.html        <span class="code-comment"># Thanh điều hướng riêng cho Quản trị viên</span>
+            ├── pages/                        <span class="code-comment"># Các trang giao diện học viên (Trang chủ, Lớp học,...)</span>
+            ├── admin/                        <span class="code-comment"># Các trang CRUD quản trị (Dashboard, Lớp, HLV,...)</span>
+            └── teacher/dashboard.html        <span class="code-comment"># Trang làm việc của Giáo viên</span></code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 7: BỘ KIỂM THỬ TỰ ĐỘNG (AUTOMATED TEST SUITE) -->
+  <!-- ========================================== -->
+  <div id="tab-test" class="tab-pane">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-vial-circle-check"></i></div>
+        <div>
+          <h2 class="card-title">Bộ Kiểm Thử Tự Động Toàn Diện Hệ Thống (Automated Test Suite)</h2>
+          <p style="font-size:13px; color:#64748b;">Kịch bản kiểm thử khép kín các luồng CRUD, nghiệp vụ đặt lớp, cập nhật thông tin và phân quyền</p>
+        </div>
+      </div>
+
+      <div class="callout callout-success" style="margin-bottom: 24px;">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+          <b style="color:#15803d; font-size:14px; display:block; margin-bottom:4px;">Kết Quả Kiểm Thử Thực Tế: 37 / 37 Test Cases Đạt Chuẩn (100% PASS)</b>
+          <p style="font-size:13px; color:#0f172a; margin:0;">Tất cả các chức năng: Đăng nhập đa vai trò, bộ lọc thời gian thực trên Dashboard, tìm kiếm & lọc trên các trang danh sách, quy trình CRUD, đặt lớp của học viên, duyệt đơn của Admin và đổi mật khẩu đều hoạt động hoàn hảo.</p>
+        </div>
+      </div>
+
+      <h3 style="color:#0f172a; margin: 0 0 10px; font-size:16px;">Lệnh Chạy Bộ Test Tự Động</h3>
+      <div class="code-block" style="margin-bottom: 24px;">
+        <code><span class="code-comment"># Chạy trực tiếp từ thư mục gốc Yoga-Java</span>
+<span class="code-cmd">node</span> <span class="code-val">test_system_flows.js</span></code>
+      </div>
+
+      <h3 style="color:#0f172a; margin: 0 0 14px; font-size:16px;">Bảng Chi Tiết Các Nhóm Nghiệp Vụ Đã Kiểm Thử</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 25%;">Nhóm Kiểm Thử</th>
+            <th style="width: 35%;">Các Hành Động & Kịch Bản Kiểm Tra</th>
+            <th style="width: 25%;">Endpoints & Giao Thức</th>
+            <th style="width: 15%;">Kết Quả</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. Xác thực tài khoản</b></td>
+            <td>Đăng nhập quản trị viên (admin/123456) và học viên (student1/123456), nhận JSESSIONID an toàn.</td>
+            <td><code>POST /admin/login</code><br><code>POST /account/login</code></td>
+            <td><span class="badge badge-confirmed">2/2 PASS</span></td>
+          </tr>
+          <tr>
+            <td><b>2. Dashboard & Bộ lọc ngày</b></td>
+            <td>Kiểm tra hiển thị dữ liệu theo Tất cả, Hôm nay, 7 ngày qua, 30 ngày qua và khoảng ngày tùy chỉnh.</td>
+            <td><code>GET /admin/dashboard?range=...</code></td>
+            <td><span class="badge badge-confirmed">5/5 PASS</span></td>
+          </tr>
+          <tr>
+            <td><b>3. CRUD Lớp học Yoga</b></td>
+            <td>Tìm kiếm theo tên/giáo viên/lịch học -> Tạo lớp mới -> Kiểm tra CSDL -> Sửa thông tin -> Xóa lớp học.</td>
+            <td><code>POST /admin/classes/create</code><br><code>POST /admin/classes/{id}/edit</code><br><code>POST /admin/classes/{id}/delete</code></td>
+            <td><span class="badge badge-confirmed">7/7 PASS</span></td>
+          </tr>
+          <tr>
+            <td><b>4. CRUD Giáo viên Yoga</b></td>
+            <td>Tìm kiếm theo tên/email/kinh nghiệm -> Tạo giáo viên -> Kiểm tra CSDL -> Cập nhật hồ sơ -> Xóa giáo viên.</td>
+            <td><code>POST /admin/teachers/create</code><br><code>POST /admin/teachers/{id}/edit</code><br><code>POST /admin/teachers/{id}/delete</code></td>
+            <td><span class="badge badge-confirmed">7/7 PASS</span></td>
+          </tr>
+          <tr>
+            <td><b>5. CRUD Học viên</b></td>
+            <td>Tìm kiếm theo tên/SĐT/địa chỉ/giới tính -> Thêm học viên -> Kiểm tra CSDL -> Cập nhật thông tin -> Xóa học viên.</td>
+            <td><code>POST /admin/customers/create</code><br><code>POST /admin/customers/{id}/edit</code><br><code>POST /admin/customers/{id}/delete</code></td>
+            <td><span class="badge badge-confirmed">7/7 PASS</span></td>
+          </tr>
+          <tr>
+            <td><b>6. Đặt lớp & Duyệt đơn</b></td>
+            <td>Học viên gửi đơn đăng ký gói học -> Đơn tạo PENDING -> Admin duyệt CONFIRMED -> Học viên xem lớp đã duyệt.</td>
+            <td><code>POST /register</code><br><code>POST /admin/registrations/{id}/approve</code><br><code>GET /registered-classes</code></td>
+            <td><span class="badge badge-confirmed">5/5 PASS</span></td>
+          </tr>
+          <tr>
+            <td><b>7. Cập nhật hồ sơ & Mật khẩu</b></td>
+            <td>Học viên cập nhật họ tên, SĐT, địa chỉ -> Đổi mật khẩu mới -> Đăng xuất -> Đăng nhập lại với mật khẩu mới.</td>
+            <td><code>POST /account/profile</code><br><code>POST /account/password</code><br><code>POST /account/login</code></td>
+            <td><span class="badge badge-confirmed">4/4 PASS</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function switchTab(evt, tabId) {
+  // Hide all tab panes
+  const panes = document.querySelectorAll('.tab-pane');
+  panes.forEach(pane => pane.classList.remove('active'));
+
+  // Remove active from all buttons
+  const btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(btn => btn.classList.remove('active'));
+
+  // Show target pane & activate clicked button
+  document.getElementById(tabId).classList.add('active');
+  evt.currentTarget.classList.add('active');
+
+  // Scroll to top of tab smoothly
+  window.scrollTo({ top: 120, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

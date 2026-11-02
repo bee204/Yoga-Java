@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa học của tôi - VITA Yoga Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/classes.css}">
+    <link rel="stylesheet" th:href="@{/css/login-chooser.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body style="background: #f8fafc;">
+    <div th:replace="~{components/header :: header}"></div>
+
+    <main>
+        <div class="container" style="padding: 40px 15px; max-width: 1140px;">
+            <div th:if="${success}" class="alert alert-success" style="background:#d4edda;color:#155724;padding:12px 18px;margin-bottom:20px;border-radius:8px;">
+                <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error" style="background:#f8d7da;color:#721c24;padding:12px 18px;margin-bottom:20px;border-radius:8px;">
+                <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 280px 1fr; gap: 30px; align-items: start;">
+                <!-- Left Sidebar for Student -->
+                <div th:replace="~{components/account_sidebar :: account_sidebar('classes')}"></div>
+
+                <!-- Right Content -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <div>
+                            <h1 style="color: #10372f; margin: 0 0 5px 0; font-size: 24px;">Khóa học đã đăng ký</h1>
+                            <p style="color: #64748b; margin: 0; font-size: 13.5px;">Theo dõi tiến độ duyệt đơn, thông tin lịch học và gửi đánh giá lớp.</p>
+                        </div>
+                        <a th:href="@{/classes}" style="background: #10372f; color: white; padding: 9px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                            <i class="fa-solid fa-plus"></i> Đăng ký lớp mới
+                        </a>
+                    </div>
+
+                    <div th:if="${registrations.isEmpty()}" style="background: white; border-radius: 14px; padding: 50px 20px; text-align: center; border: 1px solid #e2ece9;">
+                        <i class="fa-solid fa-calendar-xmark" style="font-size: 44px; color: #94a3b8; margin-bottom: 15px;"></i>
+                        <h3 style="color: #10372f; margin: 0 0 10px 0; font-size: 18px;">Bạn chưa có khóa học nào</h3>
+                        <p style="color: #64748b; margin-bottom: 20px; font-size: 14px;">Hãy khám phá các lớp học Yoga phù hợp với bạn.</p>
+                        <a th:href="@{/classes}" style="background: #10372f; color: white; padding: 10px 22px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">Khám phá lớp học ngay</a>
+                    </div>
+
+                    <div th:if="${!registrations.isEmpty()}" style="display: flex; flex-direction: column; gap: 18px;">
+                        <div th:each="r : ${registrations}" style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span th:if="${r.status == 'CONFIRMED'}" style="background: #dcfce7; color: #15803d; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 20px;">
+                                        <i class="fa-solid fa-circle-check"></i> ĐÃ DUYỆT
+                                    </span>
+                                    <span th:if="${r.status == 'PENDING'}" style="background: #fef9c3; color: #854d0e; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 20px;">
+                                        <i class="fa-regular fa-clock"></i> CHỜ DUYỆT
+                                    </span>
+                                    <span th:if="${r.status == 'CANCELLED'}" style="background: #fee2e2; color: #b91c1c; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 20px;">
+                                        <i class="fa-solid fa-ban"></i> ĐÃ HỦY
+                                    </span>
+                                    <small style="color: #94a3b8; font-weight: 600;" th:text="${'Đơn #' + r.id}">#1</small>
+                                </div>
+                                <div style="color: #64748b; font-size: 13px;">
+                                    Gói tập: <strong style="color: #10372f;" th:text="${r.packageMonths + ' tháng'}">1 tháng</strong>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center;">
+                                <div>
+                                    <h3 th:text="${r.yogaClass != null ? r.yogaClass.name : 'Lớp Yoga'}" style="margin: 0 0 8px 0; color: #10372f; font-size: 18px;">Tên lớp</h3>
+                                    <p style="color: #64748b; font-size: 13.5px; margin: 0 0 6px 0;">
+                                        <i class="fa-regular fa-calendar" style="color: #10372f;"></i> <span th:text="${r.yogaClass != null ? r.yogaClass.lichHoc : ''}">Lịch học</span> · 
+                                        <i class="fa-regular fa-clock" style="color: #10372f;"></i> <span th:text="${r.yogaClass != null ? (r.yogaClass.startTime + ' - ' + r.yogaClass.endTime) : ''}">Giờ</span>
+                                    </p>
+                                    <p style="color: #64748b; font-size: 13.5px; margin: 0;">
+                                        <i class="fa-solid fa-location-dot" style="color: #10372f;"></i> <span th:text="${r.yogaClass != null ? r.yogaClass.location : ''}">Địa điểm</span>
+                                    </p>
+                                </div>
+
+                                <div style="text-align: right;">
+                                    <span style="font-size: 12px; color: #64748b; display: block;">Tổng học phí:</span>
+                                    <strong style="color: #16a34a; font-size: 18px;" th:text="${#numbers.formatDecimal(r.finalPrice, 0, 'POINT', 0, 'COMMA') + ' đ'}">500.000 đ</strong>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid #f1f5f9; justify-content: flex-end;">
+                                <a th:if="${r.status == 'CONFIRMED'}" th:href="@{'/registered-classes/' + ${r.classId}}" style="background: #fef3c7; color: #92400e; padding: 7px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                                    <i class="fa-solid fa-star"></i> Đánh giá buổi học
+                                </a>
+                                <form th:if="${r.status == 'PENDING'}" method="POST" th:action="@{'/registered-classes/' + ${r.id} + '/cancel'}" onsubmit="return confirm('Bạn có chắc muốn hủy đơn đăng ký này?');" style="margin: 0;">
+                                    <button type="submit" style="background: #fee2e2; color: #dc2626; border: none; padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                                        <i class="fa-solid fa-xmark"></i> Hủy đơn
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{components/footer :: footer}"></div>
+</body>
+</html>

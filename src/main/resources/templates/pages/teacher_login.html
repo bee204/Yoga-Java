@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập giáo viên - VITA Yoga</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher-login.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body class="teacher-login-body">
+    <main>
+        <section class="teacher-login-page">
+            <a th:href="@{/}" class="teacher-login-return">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Về website VITA
+            </a>
+            
+            <div class="teacher-login-shell">
+                <!-- Left brand column -->
+                <aside class="teacher-login-brief">
+                    <div class="teacher-login-brand">
+                        <span><i class="fa-solid fa-spa" aria-hidden="true"></i></span>
+                        <p><strong>VITA</strong><small>Teacher Portal</small></p>
+                    </div>
+
+                    <div class="teacher-login-message">
+                        <span>Cổng vận hành lớp học</span>
+                        <h1>Mỗi buổi dạy,<br>một hành trình.</h1>
+                        <p>Không gian dành riêng cho giáo viên theo dõi lớp, học viên và chất lượng từng buổi Yoga.</p>
+                    </div>
+
+                    <div class="teacher-login-capabilities">
+                        <div>
+                            <span><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i></span>
+                            <p><strong>Điểm danh nhanh</strong><small>Cập nhật tình trạng học viên theo buổi</small></p>
+                        </div>
+                        <div>
+                            <span><i class="fa-regular fa-star" aria-hidden="true"></i></span>
+                            <p><strong>Theo dõi phản hồi</strong><small>Nắm bắt đánh giá của từng lớp học</small></p>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Right form column -->
+                <div class="teacher-login-panel">
+                    <div class="teacher-login-heading">
+                        <span><i class="fa-solid fa-person-chalkboard" aria-hidden="true"></i></span>
+                        <div>
+                            <small>Khu vực dành cho giáo viên</small>
+                            <h2>Đăng nhập cổng giảng dạy</h2>
+                            <p>Sử dụng tài khoản được quản trị viên VITA cấp.</p>
+                        </div>
+                    </div>
+
+                    <div th:if="${error}" class="teacher-login-alert" role="alert">
+                        <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+
+                    <div th:if="${success}" class="teacher-login-alert" style="background:#e8f5e9;color:#2e7d32;" role="alert">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        <span th:text="${success}"></span>
+                    </div>
+
+                    <form method="POST" th:action="@{/teacher/login}" class="teacher-login-form">
+                        <div class="teacher-login-field">
+                            <label for="teacherEmail">Email hoặc Tên đăng nhập</label>
+                            <div>
+                                <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+                                <input type="text" id="teacherEmail" name="email" required autocomplete="username" placeholder="teacher1 hoặc giaovien@vitayoga.vn" autofocus>
+                            </div>
+                        </div>
+
+                        <div class="teacher-login-field">
+                            <label for="teacherPassword">Mật khẩu</label>
+                            <div>
+                                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                                <input type="password" id="teacherPassword" name="password" required autocomplete="current-password" placeholder="Nhập mật khẩu">
+                                <button type="button" class="teacher-password-toggle" aria-label="Hiện mật khẩu" onclick="toggleTeacherPwd()">
+                                    <i id="toggleIcon" class="fa-regular fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="teacher-login-submit">
+                            <span>Vào không gian giảng dạy</span>
+                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </form>
+
+                    <div class="teacher-login-support">
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        <p><strong>Chưa có hoặc quên tài khoản?</strong><span>Vui lòng liên hệ quản trị viên trung tâm để được cấp lại thông tin.</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function toggleTeacherPwd() {
+            var input = document.getElementById('teacherPassword');
+            var icon = document.getElementById('toggleIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-regular fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-regular fa-eye';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân - VITA Yoga Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/account.css}">
+    <link rel="stylesheet" th:href="@{/css/login-chooser.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body style="background: #f8fafc;">
+    <div th:replace="~{components/header :: header}"></div>
+
+    <main>
+        <div class="container" style="padding: 40px 15px; max-width: 1140px;">
+            <div th:if="${success}" class="alert alert-success" style="background:#d4edda;color:#155724;padding:12px 18px;margin-bottom:20px;border-radius:8px;">
+                <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error" style="background:#f8d7da;color:#721c24;padding:12px 18px;margin-bottom:20px;border-radius:8px;">
+                <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 280px 1fr; gap: 30px; align-items: start;">
+                <!-- Left Sidebar for Student -->
+                <div th:replace="~{components/account_sidebar :: account_sidebar('profile')}"></div>
+
+                <!-- Right Content -->
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <!-- Profile Form -->
+                    <div style="background: white; border-radius: 14px; padding: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+                        <h2 style="color: #10372f; font-size: 20px; margin-top: 0; margin-bottom: 8px;">Thông tin cá nhân</h2>
+                        <p style="color: #64748b; font-size: 13.5px; margin: 0 0 20px 0;">Cập nhật họ tên, số điện thoại và địa chỉ nhận thông báo lịch tập.</p>
+
+                        <form method="POST" th:action="@{/account/profile}">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                                <div style="grid-column: span 2;">
+                                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #334155;">Họ và tên *</label>
+                                    <input type="text" name="name" th:value="${user.name}" required style="width: 100%; padding: 10px 14px; border: 1px solid #cce3de; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #334155;">Email (Tài khoản đăng nhập)</label>
+                                    <input type="email" th:value="${user.email}" disabled style="width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; color: #64748b; font-size: 14px; box-sizing: border-box;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #334155;">Số điện thoại</label>
+                                    <input type="tel" name="phone" th:value="${customer != null ? customer.phone : ''}" placeholder="0901234567" style="width: 100%; padding: 10px 14px; border: 1px solid #cce3de; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #334155;">Giới tính</label>
+                                    <select name="gender" style="width: 100%; padding: 10px 14px; border: 1px solid #cce3de; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                                        <option value="male" th:selected="${customer != null and customer.gender == 'male'}">Nam</option>
+                                        <option value="female" th:selected="${customer != null and customer.gender == 'female'}">Nữ</option>
+                                        <option value="other" th:selected="${customer != null and customer.gender == 'other'}">Khác</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #334155;">Địa chỉ</label>
+                                    <input type="text" name="address" th:value="${customer != null ? customer.address : ''}" placeholder="Số nhà, đường, quận/huyện..." style="width: 100%; padding: 10px 14px; border: 1px solid #cce3de; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                                </div>
+                            </div>
+                            <button type="submit" style="background: #10372f; color: white; padding: 10px 22px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;">
+                                <i class="fa-solid fa-check"></i> Lưu thay đổi
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Change Password Form -->
+                    <div id="password-section" style="background: white; border-radius: 14px; padding: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+                        <h2 style="color: #10372f; font-size: 20px; margin-top: 0; margin-bottom: 8px;">Đổi mật khẩu tài khoản</h2>
+                        <p style="color: #64748b; font-size: 13.5px; margin: 0 0 20px 0;">Mật khẩu mới tối thiểu 6 ký tự để bảo đảm an toàn.</p>
+
+                        <form method="POST" th:action="@{/account/password}">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                                <div>
+                                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #334155;">Mật khẩu mới *</label>
+                                    <input type="password" name="password" required minlength="6" placeholder="Nhập mật khẩu mới" style="width: 100%; padding: 10px 14px; border: 1px solid #cce3de; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #334155;">Xác nhận lại mật khẩu *</label>
+                                    <input type="password" name="confirm_password" required minlength="6" placeholder="Nhập lại mật khẩu mới" style="width: 100%; padding: 10px 14px; border: 1px solid #cce3de; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                                </div>
+                            </div>
+                            <button type="submit" style="background: #1e293b; color: white; padding: 10px 22px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;">
+                                <i class="fa-solid fa-key"></i> Đổi mật khẩu
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{components/footer :: footer}"></div>
+</body>
+</html>

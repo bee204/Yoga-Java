@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="header">
+<nav class="main-nav">
+	<div class="container main-nav-container">
+		<a th:href="@{/}" class="nav-brand" aria-label="VITA Yoga Center - Trang chủ">
+			<span class="nav-brand-mark"><i class="fa-solid fa-leaf" aria-hidden="true"></i></span>
+			<span><strong>VITA</strong><small>Yoga Center</small></span>
+		</a>
+		<button type="button" class="nav-toggle" onclick="toggleMainNav()" aria-label="Mở menu điều hướng" aria-expanded="false">
+			<i class="fa-solid fa-bars" aria-hidden="true"></i>
+		</button>
+		<ul class="nav-list">
+			<li><a th:href="@{/}" th:classappend="${currentUri == '/' or currentUri == ''} ? 'active' : ''">Trang chủ</a></li>
+			<li><a th:href="@{/classes}" th:classappend="${currentUri != null and currentUri.startsWith('/classes')} ? 'active' : ''">Lớp học</a></li>
+			<li><a th:href="@{/teachers}" th:classappend="${currentUri != null and currentUri.startsWith('/teachers')} ? 'active' : ''">Giáo viên Yoga</a></li>
+			<li><a th:href="@{/register}" th:classappend="${currentUri != null and currentUri.startsWith('/register')} ? 'active' : ''">Đăng ký</a></li>
+			<li><a th:href="@{/authors}" th:classappend="${currentUri != null and (currentUri.startsWith('/authors') or currentUri.startsWith('/team'))} ? 'active' : ''">Nhóm tác giả</a></li>
+		</ul>
+		<div class="account-menu">
+			<div th:if="${currentUser != null}">
+				<button type="button" class="account-trigger" onclick="toggleDropdown()" aria-haspopup="true" aria-controls="dropdown-menu" aria-expanded="false">
+					<span class="account-avatar"><i class="fa-regular fa-user" aria-hidden="true"></i></span>
+					<span class="account-trigger__name" th:text="${currentUser.name != null and !currentUser.name.isEmpty() ? currentUser.name : currentUser.userName}">User</span>
+					<i class="fa-solid fa-chevron-down account-chevron" aria-hidden="true"></i>
+				</button>
+				<div class="dropdown-menu" id="dropdown-menu">
+					<div class="account-summary">
+						<span class="account-summary__avatar"><i class="fa-regular fa-user" aria-hidden="true"></i></span>
+						<span>
+							<strong th:text="${currentUser.name != null and !currentUser.name.isEmpty() ? currentUser.name : currentUser.userName}">User</strong>
+							<small th:text="${currentUser.email}">email@domain.com</small>
+						</span>
+					</div>
+					<div class="account-menu__links">
+						<a th:href="@{/account}">
+							<span class="account-menu__icon"><i class="fa-regular fa-id-card" aria-hidden="true"></i></span>
+							<span><strong>Thông tin tài khoản</strong><small>Xem hồ sơ cá nhân</small></span>
+						</a>
+						<a th:if="${currentUser.role == 'customer' or currentUser.role == 'CUSTOMER'}" th:href="@{/registered-classes}">
+							<span class="account-menu__icon"><i class="fa-solid fa-person-running" aria-hidden="true"></i></span>
+							<span><strong>Lớp đã đăng ký</strong><small>Lịch học và trạng thái</small></span>
+						</a>
+						<a th:if="${currentUser.role == 'teacher' or currentUser.role == 'TEACHER'}" th:href="@{/teacher/dashboard}">
+							<span class="account-menu__icon"><i class="fa-solid fa-person-chalkboard" aria-hidden="true"></i></span>
+							<span><strong>Cổng giảng dạy</strong><small>Quản lý lớp & điểm danh</small></span>
+						</a>
+						<a th:if="${currentUser.role == 'admin' or currentUser.role == 'ADMIN'}" th:href="@{/admin/dashboard}">
+							<span class="account-menu__icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
+							<span><strong>Quản trị viên</strong><small>Vào Control Center</small></span>
+						</a>
+					</div>
+					<form method="POST" th:action="@{/account/logout}" class="account-logout">
+						<button type="submit"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i> Đăng xuất</button>
+					</form>
+				</div>
+			</div>
+			<div th:if="${currentUser == null}">
+				<button type="button" class="account-trigger guest-account" data-login-chooser-open aria-haspopup="dialog" aria-controls="loginChooserModal" aria-expanded="false">
+					<i class="fa-regular fa-user" aria-hidden="true"></i> Đăng nhập
+				</button>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<!-- Login Chooser Modal -->
+<div class="login-chooser" id="loginChooserModal" hidden aria-hidden="true">
+	<div class="login-chooser__backdrop" data-login-chooser-close></div>
+	<section class="login-chooser__dialog" role="dialog" aria-modal="true" aria-labelledby="loginChooserTitle" aria-describedby="loginChooserDescription">
+		<button type="button" class="login-chooser__close" data-login-chooser-close aria-label="Đóng cửa sổ chọn tài khoản"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+		<div class="login-chooser__heading">
+			<span><i class="fa-solid fa-fingerprint" aria-hidden="true"></i></span>
+			<div>
+				<small>Chọn cổng truy cập</small>
+				<h2 id="loginChooserTitle">Bạn đăng nhập với vai trò nào?</h2>
+				<p id="loginChooserDescription">Mỗi loại tài khoản có không gian và chức năng riêng tại VITA.</p>
+			</div>
+		</div>
+		<div class="login-chooser__options">
+			<a th:href="@{/account/login}" class="login-option login-option--customer">
+				<span class="login-option__icon"><i class="fa-solid fa-person-running" aria-hidden="true"></i></span>
+				<span class="login-option__copy">
+					<small>Tài khoản thành viên</small>
+					<strong>Học viên Yoga</strong>
+					<span>Xem lớp đã đăng ký và quản lý hồ sơ cá nhân.</span>
+				</span>
+				<i class="fa-solid fa-arrow-right login-option__arrow" aria-hidden="true"></i>
+			</a>
+			<a th:href="@{/teacher/login}" class="login-option login-option--teacher">
+				<span class="login-option__icon"><i class="fa-solid fa-person-chalkboard" aria-hidden="true"></i></span>
+				<span class="login-option__copy">
+					<small>Cổng giảng dạy</small>
+					<strong>Giáo viên Yoga</strong>
+					<span>Quản lý lớp phụ trách, điểm danh và đánh giá.</span>
+				</span>
+				<i class="fa-solid fa-arrow-right login-option__arrow" aria-hidden="true"></i>
+			</a>
+			<a th:href="@{/admin/login}" class="login-option login-option--admin">
+				<span class="login-option__icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
+				<span class="login-option__copy">
+					<small>Control center</small>
+					<strong>Quản trị viên</strong>
+					<span>Điều hành dữ liệu và hoạt động của trung tâm.</span>
+				</span>
+				<i class="fa-solid fa-arrow-right login-option__arrow" aria-hidden="true"></i>
+			</a>
+		</div>
+		<div class="login-chooser__footer">
+			<i class="fa-solid fa-lock" aria-hidden="true"></i> Hãy chọn đúng cổng tương ứng với tài khoản được cấp.
+		</div>
+	</section>
+</div>
+
+<style>
+.main-nav {
+	position: sticky;
+	top: 0;
+	z-index: 999;
+	background: rgba(16, 55, 47, .97);
+	box-shadow: 0 8px 30px rgba(16, 52, 45, .14);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+}
+
+.main-nav-container {
+	display: flex;
+	align-items: center;
+	min-height: 78px;
+	gap: 30px;
+}
+
+.nav-brand {
+	flex: 0 0 210px;
+	display: flex;
+	align-items: center;
+	gap: 11px;
+	color: #fff;
+	font-size: 1.05rem;
+	font-weight: 700;
+	line-height: 1.25;
+	text-decoration: none;
+}
+
+.nav-brand-mark {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 12px;
+	background: #c8e66b;
+	color: #143e36;
+}
+
+.nav-brand strong,
+.nav-brand small { display: block; }
+.nav-brand strong { letter-spacing: .14em; color: #fff; }
+.nav-brand small { margin-top: 1px; color: #bcd2cc; font-size: .68rem; font-weight: 500; }
+
+.nav-toggle {
+	display: none;
+	width: 42px;
+	height: 42px;
+	border: 1px solid rgba(255,255,255,.18);
+	border-radius: 10px;
+	background: rgba(255,255,255,.08);
+	color: #fff;
+	cursor: pointer;
+}
+
+.main-nav .nav-list {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	flex: 1;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.main-nav .nav-list a {
+	display: block;
+	padding: 10px 16px;
+	border: 1px solid transparent;
+	border-radius: 11px;
+	color: #c9dbd5;
+	text-decoration: none;
+	white-space: nowrap;
+	font-size: .91rem;
+	font-weight: 650;
+	letter-spacing: .015em;
+	line-height: 1.25;
+	transform: none;
+	transition: color .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.main-nav .nav-list a:hover {
+	border-color: rgba(255,255,255,.08);
+	background: rgba(255,255,255,.07);
+	color: #fff;
+}
+
+.main-nav .nav-list a.active {
+	border-color: rgba(200,230,107,.2);
+	background: rgba(200,230,107,.13);
+	box-shadow: inset 0 0 0 1px rgba(200,230,107,.04);
+	color: #dcf59a;
+}
+
+.main-nav .nav-list a:focus-visible,
+.account-trigger:focus-visible,
+.nav-toggle:focus-visible {
+	outline: 3px solid rgba(200,230,107,.55);
+	outline-offset: 3px;
+}
+
+.account-menu {
+	position: relative;
+	flex: 0 0 auto;
+}
+
+.account-trigger {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	border: 1px solid rgba(255,255,255,.12);
+	border-radius: 11px;
+	padding: 10px 14px;
+	background: rgba(255,255,255,.06);
+	color: #e2eeea;
+	font: inherit;
+	font-size: .88rem;
+	font-weight: 650;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.account-avatar {
+	display: grid;
+	place-items: center;
+	width: 29px;
+	height: 29px;
+	border-radius: 9px;
+	background: rgba(200,230,107,.15);
+	color: #d9f58a;
+}
+
+.account-trigger__name {
+	max-width: 130px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.account-chevron {
+	margin-left: 2px;
+	font-size: .64rem;
+	transition: transform .18s ease;
+}
+
+.account-trigger[aria-expanded="true"] .account-chevron {
+	transform: rotate(180deg);
+}
+
+.account-trigger:hover,
+.account-menu:focus-within .account-trigger {
+	border-color: rgba(200,230,107,.25);
+	background: rgba(200,230,107,.11);
+	color: #dcf59a;
+}
+
+.guest-account {
+	text-decoration: none;
+}
+
+.account-menu .dropdown-menu {
+	display: none;
+	position: absolute;
+	top: calc(100% + 11px);
+	right: 0;
+	width: 300px;
+	padding: 10px;
+	background: #f8fcfa;
+	border: 1px solid #d5e5de;
+	border-radius: 16px;
+	box-shadow: 0 20px 48px rgba(14, 52, 44, .20);
+	z-index: 1000;
+}
+
+.account-menu .dropdown-menu::before {
+	content: '';
+	position: absolute;
+	top: -6px;
+	right: 24px;
+	width: 11px;
+	height: 11px;
+	transform: rotate(45deg);
+	border-top: 1px solid #d5e5de;
+	border-left: 1px solid #d5e5de;
+	background: #f8fcfa;
+}
+
+.account-menu .dropdown-menu.show {
+	display: block;
+}
+
+.account-summary {
+	display: flex;
+	align-items: center;
+	gap: 11px;
+	padding: 8px 9px 14px;
+	border-bottom: 1px solid #e1ebe7;
+}
+
+.account-summary__avatar {
+	display: grid;
+	place-items: center;
+	width: 41px;
+	height: 41px;
+	flex: 0 0 auto;
+	border-radius: 12px;
+	background: #dff0e8;
+	color: #237461;
+}
+
+.account-summary span:last-child { min-width: 0; }
+.account-summary strong,
+.account-summary small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-summary strong { color: #193d34; font-size: .86rem; }
+.account-summary small { margin-top: 2px; color: #768b84; font-size: .69rem; }
+.account-menu__links { display: grid; gap: 3px; padding: 8px 0; }
+
+.account-menu .dropdown-menu a {
+	display: flex;
+	align-items: center;
+	gap: 11px;
+	width: 100%;
+	padding: 10px;
+	border: 0;
+	border-radius: 10px;
+	background: transparent;
+	color: #284b42;
+	font: inherit;
+	text-align: left;
+	text-decoration: none;
+	cursor: pointer;
+	transform: none;
+}
+
+.account-menu__icon {
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	flex: 0 0 auto;
+	border-radius: 9px;
+	background: #e9f3ef;
+	color: #397c6a;
+}
+
+.account-menu .dropdown-menu a strong,
+.account-menu .dropdown-menu a small { display: block; }
+.account-menu .dropdown-menu a strong { font-size: .78rem; font-weight: 700; color: #193d34; }
+.account-menu .dropdown-menu a small { margin-top: 1px; color: #7e918b; font-size: .66rem; }
+.account-menu .dropdown-menu a:hover { background: #eaf4ef; color: #185c4c; }
+.account-menu .dropdown-menu a:hover .account-menu__icon { background: #d9ebe3; color: #1d6958; }
+.account-menu .dropdown-menu a:focus-visible,
+.account-menu .account-logout button:focus-visible {
+	outline: 3px solid rgba(43,128,109,.22);
+	outline-offset: 1px;
+}
+.account-logout { padding-top: 8px; border-top: 1px solid #e1ebe7; }
+
+.account-menu .account-logout button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	padding: 10px;
+	border: 0;
+	border-radius: 10px;
+	background: #fff1ee;
+	color: #a34438;
+	font: inherit;
+	font-size: .76rem;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.account-menu .account-logout button:hover {
+	background: #fbe4df;
+	color: #8d352b;
+}
+
+/* Modal login chooser CSS */
+.login-chooser-open { overflow: hidden; }
+.login-chooser[hidden] { display: none !important; }
+.login-chooser { position: fixed; z-index: 1400; inset: 0; display: grid; place-items: center; padding: 20px; }
+.login-chooser__backdrop { position: absolute; inset: 0; background: rgba(8,31,26,.7); backdrop-filter: blur(6px); opacity: 0; transition: opacity .2s ease; }
+.login-chooser__dialog { position: relative; width: min(100%,620px); padding: 27px; border: 1px solid rgba(255,255,255,.72); border-radius: 22px; background: #fbfdfc; box-shadow: 0 30px 90px rgba(7,37,30,.3); opacity: 0; transform: translateY(12px) scale(.98); transition: opacity .2s ease,transform .2s ease; }
+.login-chooser.is-open .login-chooser__backdrop,
+.login-chooser.is-open .login-chooser__dialog { opacity: 1; }
+.login-chooser.is-open .login-chooser__dialog { transform: translateY(0) scale(1); }
+.login-chooser__close { position: absolute; top: 15px; right: 15px; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1px solid #d9e3df; border-radius: 10px; background: #f4f8f6; color: #627870; cursor: pointer; }
+.login-chooser__close:hover { background: #e8f1ed; color: #245d4f; }
+.login-chooser__heading { display: flex; align-items: flex-start; gap: 14px; padding: 2px 44px 20px 0; border-bottom: 1px solid #e1e9e5; }
+.login-chooser__heading > span { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 auto; border-radius: 14px; background: #e2eee8; color: #286e5b; }
+.login-chooser__heading small { color: #5e8176; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; font-size: .75rem; }
+.login-chooser__heading h2 { margin: 3px 0 5px; color: #193f35; font-size: 1.35rem; letter-spacing: -.02em; }
+.login-chooser__heading p { margin: 0; color: #768a83; font-size: .88rem; }
+.login-chooser__options { display: grid; gap: 9px; padding: 18px 0; }
+.login-option { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 13px; min-height: 86px; padding: 13px 15px; border: 1px solid #dbe5e1; border-radius: 14px; background: #fff; color: inherit; text-decoration: none; transition: border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease; }
+.login-option:hover { border-color: #91b5a8; background: #f4faf7; box-shadow: 0 9px 22px rgba(28,78,64,.08); color: inherit; transform: translateY(-1px); }
+.login-option__icon { display: grid; place-items: center; width: 45px; height: 45px; border-radius: 13px; background: #e5f1eb; color: #2c745f; }
+.login-option__copy,
+.login-option__copy small,
+.login-option__copy strong,
+.login-option__copy > span { display: block; }
+.login-option__copy small { color: #6d897f; font-weight: 750; text-transform: uppercase; font-size: .72rem; }
+.login-option__copy strong { margin-top: 1px; color: #294d43; font-size: .94rem; }
+.login-option__copy > span { margin-top: 3px; color: #83938e; font-size: .82rem; }
+.login-option__arrow { color: #78938a; }
+.login-option--teacher { border-color: #ddd6e0; }
+.login-option--teacher .login-option__icon { background: #eee8f1; color: #655174; }
+.login-option--teacher .login-option__copy small { color: #806c8c; }
+.login-option--teacher:hover { border-color: #ad9ab6; background: #faf7fb; }
+.login-option--admin { border-color: #dfd7cf; }
+.login-option--admin .login-option__icon { background: #f3e9df; color: #a05f47; }
+.login-option--admin .login-option__copy small { color: #9d6a55; }
+.login-option--admin:hover { border-color: #c7a894; background: #fdf9f5; }
+.login-chooser__footer { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 0; padding-top: 15px; border-top: 1px solid #e1e9e5; background: transparent; color: #84958f; text-align: center; font-size: .84rem; }
+.login-chooser__footer i { color: #568174; }
+
+@media (max-width: 768px) {
+	.main-nav-container {
+		flex-wrap: wrap;
+		gap: 0;
+		padding: 0 14px;
+	}
+
+	.nav-brand {
+		flex: 1;
+		padding: 12px 0;
+	}
+
+	.nav-toggle { display: block; }
+
+	.main-nav .nav-list {
+		order: 3;
+		flex-basis: 100%;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 5px;
+		padding: 8px 0 16px;
+		display: none;
+	}
+
+	.main-nav .nav-list.is-open {
+		display: flex;
+	}
+
+	.main-nav .nav-list a {
+		padding: 12px 14px;
+		border-bottom: 0;
+		border-radius: 8px;
+	}
+
+	.main-nav .nav-list a.active {
+		border-color: rgba(200,230,107,.18);
+		background: rgba(200,230,107,.12);
+	}
+
+	.account-trigger {
+		padding: 8px 10px;
+	}
+
+	.account-trigger__name { display: none; }
+	.account-menu .dropdown-menu { right: 0; width: min(300px, calc(100vw - 28px)); }
+}
+
+@media (max-width: 520px) {
+    .login-chooser { padding: 12px; }
+    .login-chooser__dialog { max-height: calc(100svh - 24px); overflow-y: auto; padding: 21px 17px; border-radius: 18px; }
+    .login-chooser__heading { align-items: center; padding-right: 38px; }
+    .login-chooser__heading > span { width: 42px; height: 42px; }
+    .login-option { min-height: 78px; padding: 11px; }
+    .login-option__icon { width: 40px; height: 40px; }
+}
+</style>
+
+<script>
+// Responsive Navigation Toggle
+function toggleMainNav() {
+    var navList = document.querySelector('.main-nav .nav-list');
+    var navToggle = document.querySelector('.main-nav .nav-toggle');
+    if (navList) {
+        var isOpen = navList.classList.toggle('is-open');
+        if (navToggle) {
+            navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+    }
+}
+
+// Account Dropdown Toggle
+function toggleDropdown() {
+    var menu = document.getElementById('dropdown-menu');
+    var trigger = document.querySelector('.account-trigger[aria-controls="dropdown-menu"]');
+    if (!menu) return;
+    var isOpen = menu.classList.toggle('show');
+    if (trigger) {
+        trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+}
+
+// Close Dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    var dropdown = document.querySelector('.account-menu');
+    var menu = document.getElementById('dropdown-menu');
+    if (menu && dropdown && !dropdown.contains(e.target)) {
+        menu.classList.remove('show');
+        var trigger = document.querySelector('.account-trigger[aria-controls="dropdown-menu"]');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    }
+});
+
+// Close Dropdown & Modal on Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        var menu = document.getElementById('dropdown-menu');
+        var trigger = document.querySelector('.account-trigger[aria-controls="dropdown-menu"]');
+        if (menu && menu.classList.contains('show')) {
+            menu.classList.remove('show');
+            if (trigger) {
+                trigger.setAttribute('aria-expanded', 'false');
+                trigger.focus();
+            }
+        }
+    }
+});
+
+// Login Chooser Modal Logic
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('loginChooserModal');
+    var openButton = document.querySelector('[data-login-chooser-open]');
+    var dialog = modal ? modal.querySelector('.login-chooser__dialog') : null;
+    var firstOption = modal ? modal.querySelector('.login-option') : null;
+    var previousFocus = null;
+
+    if (!modal || !openButton) return;
+
+    function openModal() {
+        previousFocus = document.activeElement;
+        modal.hidden = false;
+        modal.setAttribute('aria-hidden', 'false');
+        openButton.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('login-chooser-open');
+        requestAnimationFrame(function() {
+            modal.classList.add('is-open');
+            if (firstOption) firstOption.focus();
+        });
+    }
+
+    function closeModal() {
+        if (modal.hidden) return;
+        modal.classList.remove('is-open');
+        modal.hidden = true;
+        modal.setAttribute('aria-hidden', 'true');
+        openButton.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('login-chooser-open');
+        if (previousFocus) {
+            previousFocus.focus();
+            previousFocus = null;
+        }
+    }
+
+    openButton.addEventListener('click', openModal);
+    modal.querySelectorAll('[data-login-chooser-close]').forEach(function(el) {
+        el.addEventListener('click', closeModal);
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (modal.hidden) return;
+        if (event.key === 'Escape') {
+            closeModal();
+            return;
+        }
+        if (event.key !== 'Tab' || !dialog) return;
+
+        var focusable = Array.from(dialog.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'));
+        if (!focusable.length) return;
+        var first = focusable[0];
+        var last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    });
+});
+</script>
+</div>
+</body>
+</html>
