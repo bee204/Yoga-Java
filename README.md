@@ -2,7 +2,8 @@
 
 Hệ thống Quản lý và Đào tạo Yoga chuyên nghiệp xây dựng trên nền tảng **Java 17 LTS**, **Spring Boot 3.4.11**, **Spring Data JPA**, **Spring Security 6** và **Thymeleaf**.
 
-> 📄 **Tài liệu hướng dẫn trực quan tương tác (Gồm Tab chuyển đổi & Ảnh chụp màn hình thực tế):** Mở file [`SYSTEM_DOCUMENTATION.html`](file:///c:/Users/vuduy/Documents/Project/Yoga-Java/SYSTEM_DOCUMENTATION.html) trên trình duyệt.
+> 📄 **Tài liệu hướng dẫn trực quan tương tác (Gồm Tab chuyển đổi & Ảnh chụp màn hình thực tế):** Mở file [`SYSTEM_DOCUMENTATION.html`](file:///c:/Users/vuduy/Documents/Project/Yoga-Java/SYSTEM_DOCUMENTATION.html) trên trình duyệt.  
+> 📕 **Bản Tài liệu PDF in ấn hoàn chỉnh (26 trang đầy đủ 7 chương & ảnh giao diện):** File [`SYSTEM_DOCUMENTATION.pdf`](file:///c:/Users/vuduy/Documents/Project/Yoga-Java/SYSTEM_DOCUMENTATION.pdf).
 
 ---
 
