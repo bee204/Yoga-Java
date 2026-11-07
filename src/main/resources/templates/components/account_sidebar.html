@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<aside class="account-sidebar" th:fragment="account_sidebar(activeTab)" style="display: flex; flex-direction: column; gap: 16px;">
+    <!-- Identity Card -->
+    <div style="background: #ffffff; border-radius: 14px; padding: 25px 20px; box-shadow: 0 4px 16px rgba(16, 55, 47, 0.05); border: 1px solid #e2ece9; text-align: center;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: #dcfce7; color: #166534; font-size: 24px; font-weight: 800; display: grid; place-items: center; margin: 0 auto 12px auto; border: 2px solid #86efac;">
+            <span th:text="${user != null ? #strings.substring(user.name != null ? user.name : user.userName, 0, 1) : 'H'}">H</span>
+        </div>
+        <h3 style="color: #10372f; margin: 0 0 4px 0; font-size: 16px; font-weight: 700;" th:text="${user != null ? (user.name != null ? user.name : user.userName) : 'Học viên'}">Nguyễn Văn An</h3>
+        <p style="color: #64748b; font-size: 12.5px; margin: 0 0 12px 0; word-break: break-all;" th:text="${user != null ? user.email : ''}">an.nguyen@gmail.com</p>
+        <span style="display: inline-flex; align-items: center; gap: 5px; background: #e8f5e9; color: #2e7d32; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase;">
+            <i class="fa-solid fa-circle-check"></i> Học viên VITA
+        </span>
+    </div>
+
+    <!-- Navigation Menu for Student -->
+    <div style="background: #ffffff; border-radius: 14px; padding: 12px; box-shadow: 0 4px 16px rgba(16, 55, 47, 0.05); border: 1px solid #e2ece9;">
+        <nav style="background: transparent !important; padding: 0 !important; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+            <a th:href="@{/account}" 
+               th:style="${activeTab == 'profile' ? 'background: #10372f !important; color: #ffffff !important; font-weight: 600;' : 'background: transparent; color: #334155; font-weight: 500;'} + ' padding: 11px 16px; border-radius: 10px; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;'">
+                <i class="fa-solid fa-id-card" th:style="${activeTab == 'profile' ? 'color: #86efac !important;' : 'color: #10372f;'} + ' font-size: 16px; width: 18px; text-align: center;'"></i>
+                <span>Thông tin cá nhân</span>
+            </a>
+
+            <a th:href="@{/registered-classes}" 
+               th:style="${activeTab == 'classes' ? 'background: #10372f !important; color: #ffffff !important; font-weight: 600;' : 'background: transparent; color: #334155; font-weight: 500;'} + ' padding: 11px 16px; border-radius: 10px; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;'">
+                <i class="fa-solid fa-graduation-cap" th:style="${activeTab == 'classes' ? 'color: #86efac !important;' : 'color: #0284c7;'} + ' font-size: 16px; width: 18px; text-align: center;'"></i>
+                <span>Khóa học của tôi</span>
+            </a>
+
+            <a th:href="@{/account#password-section}" 
+               style="background: transparent; color: #334155; font-weight: 500; padding: 11px 16px; border-radius: 10px; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;">
+                <i class="fa-solid fa-key" style="color: #d97706; font-size: 16px; width: 18px; text-align: center;"></i>
+                <span>Đổi mật khẩu</span>
+            </a>
+
+            <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 6px 0;">
+
+            <form method="POST" th:action="@{/account/logout}" style="margin: 0; padding: 0; background: transparent;">
+                <button type="submit" 
+                        style="width: 100%; text-align: left; background: transparent; border: none; color: #dc2626; font-weight: 600; padding: 11px 16px; border-radius: 10px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;">
+                    <i class="fa-solid fa-arrow-right-from-bracket" style="font-size: 16px; width: 18px; text-align: center;"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </form>
+        </nav>
+    </div>
+</aside>
+</body>
+</html>

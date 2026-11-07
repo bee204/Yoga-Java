@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản - VITA Yoga Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/login-chooser.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body>
+    <div th:replace="~{components/header :: header}"></div>
+
+    <main>
+        <div class="container" style="padding: 40px 0; max-width: 480px;">
+            <div th:if="${error}" class="alert alert-error" style="background:#f8d7da;color:#721c24;padding:12px;margin:15px 0;border-radius:6px;">
+                <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+            </div>
+
+            <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); border: 1px solid #e2ece9;">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="width: 60px; height: 60px; background: #e8f5e9; color: #2e7d32; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 12px auto;">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <h1 style="color: #10372f; margin: 0 0 6px 0; font-size: 24px;">Đăng ký thành viên</h1>
+                    <p style="color: #666; font-size: 14px; margin: 0;">Tạo tài khoản để đăng ký lớp học và theo dõi lịch tập.</p>
+                </div>
+
+                <form method="POST" th:action="@{/account/register}">
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 6px;">Họ và tên</label>
+                        <input type="text" name="name" required placeholder="Nguyễn Văn A" style="width: 100%; padding: 11px; border: 1px solid #cce3de; border-radius: 8px;">
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 6px;">Địa chỉ Email</label>
+                        <input type="email" name="email" required placeholder="vidu@gmail.com" style="width: 100%; padding: 11px; border: 1px solid #cce3de; border-radius: 8px;">
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 6px;">Mật khẩu (ít nhất 6 ký tự)</label>
+                        <input type="password" name="password" required minlength="6" placeholder="••••••••" style="width: 100%; padding: 11px; border: 1px solid #cce3de; border-radius: 8px;">
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 6px;">Xác nhận mật khẩu</label>
+                        <input type="password" name="password_confirmation" required minlength="6" placeholder="••••••••" style="width: 100%; padding: 11px; border: 1px solid #cce3de; border-radius: 8px;">
+                    </div>
+
+                    <button type="submit" style="width: 100%; background: #10372f; color: white; padding: 13px; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;">
+                        Tạo tài khoản ngay
+                    </button>
+                </form>
+
+                <div style="text-align: center; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; font-size: 14px; color: #666;">
+                    Đã có tài khoản? <a th:href="@{/account/login}" style="color: #2e7d32; font-weight: 600; text-decoration: none;">Đăng nhập ngay</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{components/footer :: footer}"></div>
+</body>
+</html>

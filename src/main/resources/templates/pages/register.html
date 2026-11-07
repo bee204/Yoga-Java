@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký lớp học - VITA Yoga Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/classes.css}">
+    <link rel="stylesheet" th:href="@{/css/login-chooser.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body>
+    <div th:replace="~{components/header :: header}"></div>
+
+    <main>
+        <div class="container" style="padding: 40px 0; max-width: 760px;">
+            <div th:if="${success}" class="alert alert-success" style="background:#d4edda;color:#155724;padding:12px;margin:15px 0;border-radius:6px;">
+                <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error" style="background:#f8d7da;color:#721c24;padding:12px;margin:15px 0;border-radius:6px;">
+                <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+            </div>
+
+            <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); border: 1px solid #e2ece9;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <span style="color: #2e7d32; font-weight: 600; text-transform: uppercase; font-size: 13px;">Bắt đầu rèn luyện sức khỏe</span>
+                    <h1 style="color: #10372f; margin: 8px 0; font-size: 28px;">Đăng ký lớp học Yoga</h1>
+                    <p style="color: #666; font-size: 15px;">Điền thông tin và chọn gói tập phù hợp để tham gia khóa học cùng VITA.</p>
+                </div>
+
+                <form method="POST" th:action="@{/register}">
+                    <!-- Select Class -->
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 8px;">
+                            Chọn lớp học <span style="color: #e11d48;">*</span>
+                        </label>
+                        <select name="class_id" id="classSelect" required onchange="calculatePrice()" style="width: 100%; padding: 12px; border: 1px solid #cce3de; border-radius: 8px; font-size: 15px; background: #fafdfc;">
+                            <option value="">-- Chọn một lớp học --</option>
+                            <option th:each="cls : ${classes}" 
+                                    th:value="${cls.id}" 
+                                    th:data-price="${cls.price}" 
+                                    th:selected="${cls.id == selectedClassId}"
+                                    th:text="${cls.name + ' (' + cls.lichHoc + ' - ' + #numbers.formatDecimal(cls.price, 0, 'POINT', 0, 'COMMA') + ' đ/tháng)'}">
+                                Lớp Yoga
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Package Months -->
+                    <div style="margin-bottom: 25px;">
+                        <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 10px;">
+                            Thời hạn gói tập <span style="color: #e11d48;">*</span>
+                        </label>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                            <label style="border: 2px solid #e2ece9; border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; display: block;">
+                                <input type="radio" name="package_months" value="1" checked onchange="calculatePrice()">
+                                <strong style="display: block; margin-top: 5px; color: #10372f;">1 tháng</strong>
+                                <small style="color: #666;">Chuẩn</small>
+                            </label>
+                            <label style="border: 2px solid #e2ece9; border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; display: block;">
+                                <input type="radio" name="package_months" value="3" onchange="calculatePrice()">
+                                <strong style="display: block; margin-top: 5px; color: #10372f;">3 tháng</strong>
+                                <small style="color: #16a34a; font-weight: 600;">Giảm 5%</small>
+                            </label>
+                            <label style="border: 2px solid #e2ece9; border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; display: block;">
+                                <input type="radio" name="package_months" value="6" onchange="calculatePrice()">
+                                <strong style="display: block; margin-top: 5px; color: #10372f;">6 tháng</strong>
+                                <small style="color: #16a34a; font-weight: 600;">Giảm 10%</small>
+                            </label>
+                            <label style="border: 2px solid #e2ece9; border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; display: block;">
+                                <input type="radio" name="package_months" value="12" onchange="calculatePrice()">
+                                <strong style="display: block; margin-top: 5px; color: #10372f;">12 tháng</strong>
+                                <small style="color: #16a34a; font-weight: 600;">Giảm 20%</small>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price Estimate Card -->
+                    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="color: #166534; font-size: 13px; font-weight: 600;">TỔNG CHI PHÍ DỰ KIẾN</span>
+                            <div style="font-size: 13px; color: #666; margin-top: 3px;" id="priceFormula">Vui lòng chọn lớp học</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <strong style="font-size: 26px; color: #15803d;" id="finalPriceDisplay">0 đ</strong>
+                        </div>
+                    </div>
+
+                    <!-- Member info -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div>
+                            <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 6px;">Họ và tên</label>
+                            <input type="text" name="name" th:value="${user != null ? user.name : ''}" required style="width: 100%; padding: 10px; border: 1px solid #cce3de; border-radius: 8px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 6px;">Số điện thoại</label>
+                            <input type="tel" name="phone" th:value="${customer != null ? customer.phone : ''}" required style="width: 100%; padding: 10px; border: 1px solid #cce3de; border-radius: 8px;">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <label style="display: block; font-weight: 600; color: #10372f; margin-bottom: 6px;">Ghi chú / Yêu cầu đặc biệt</label>
+                        <textarea name="note" rows="3" placeholder="Ví dụ: Mong muốn tập thêm phần lưng, khung giờ tập..." style="width: 100%; padding: 10px; border: 1px solid #cce3de; border-radius: 8px; font-family: inherit;"></textarea>
+                    </div>
+
+                    <button type="submit" style="width: 100%; background: #10372f; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+                        <i class="fa-solid fa-paper-plane"></i> Gửi đơn đăng ký ngay
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{components/footer :: footer}"></div>
+
+    <script>
+    function calculatePrice() {
+        var sel = document.getElementById('classSelect');
+        var opt = sel.options[sel.selectedIndex];
+        var basePrice = opt ? parseFloat(opt.getAttribute('data-price')) || 0 : 0;
+        
+        var months = 1;
+        var radios = document.getElementsByName('package_months');
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                months = parseInt(radios[i].value);
+                break;
+            }
+        }
+
+        var discount = 0;
+        if (months === 3) discount = 5;
+        else if (months === 6) discount = 10;
+        else if (months === 12) discount = 20;
+
+        var total = basePrice * months * (1 - discount / 100);
+        document.getElementById('finalPriceDisplay').innerText = total.toLocaleString('vi-VN') + ' đ';
+        if (basePrice > 0) {
+            document.getElementById('priceFormula').innerText = basePrice.toLocaleString('vi-VN') + ' đ × ' + months + ' tháng (Giảm ' + discount + '%)';
+        } else {
+            document.getElementById('priceFormula').innerText = 'Vui lòng chọn lớp học';
+        }
+    }
+    window.onload = calculatePrice;
+    </script>
+</body>
+</html>
