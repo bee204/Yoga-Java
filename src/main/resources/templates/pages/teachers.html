@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo viên Yoga - VITA Yoga Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/teachers.css}">
+    <link rel="stylesheet" th:href="@{/css/login-chooser.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body>
+    <div th:replace="~{components/header :: header}"></div>
+
+    <main>
+        <div class="container">
+            <div class="teachers-page">
+                <section class="teachers-hero">
+                    <div>
+                        <span class="teachers-eyebrow"><i class="fa-solid fa-leaf" aria-hidden="true"></i> Đội ngũ tại VITA</span>
+                        <h1>Gặp gỡ những người<br><span>đồng hành cùng bạn.</span></h1>
+                        <p>Tìm hiểu kinh nghiệm và các lớp đang phụ trách trước khi chọn giáo viên Yoga phù hợp.</p>
+                    </div>
+                    <div class="teachers-hero__count">
+                        <strong th:text="${teachers.size()}">0</strong>
+                        <span>Giáo viên Yoga</span>
+                        <small>Dữ liệu hiện có tại trung tâm</small>
+                    </div>
+                </section>
+
+                <section class="teachers-grid" id="teachersGrid">
+                    <article th:each="teacher, iterStat : ${teachers}" 
+                             th:class="'teacher-vita-card teacher-vita-card--tone-' + (${iterStat.index % 3} + 1)">
+                        <div class="teacher-vita-card__visual">
+                            <span class="teacher-vita-card__number" th:text="'GV ' + (${teacher.id < 10 ? '0' + teacher.id : teacher.id})">GV 01</span>
+                            <div class="teacher-vita-card__avatar">
+                                <img th:if="${teacher.avatar != null}" th:src="@{'/img/authors/' + ${teacher.avatar}}" th:alt="${teacher.name}">
+                                <span th:if="${teacher.avatar == null}"><i class="fa-regular fa-user"></i></span>
+                            </div>
+                            <span class="teacher-vita-card__role">Giáo viên Yoga</span>
+                        </div>
+
+                        <div class="teacher-vita-card__body">
+                            <h2 th:text="${teacher.name}">Tên giáo viên</h2>
+                            <p th:text="${teacher.description}">Mô tả ngắn...</p>
+
+                            <div class="teacher-vita-card__meta">
+                                <span><i class="fa-solid fa-award" aria-hidden="true"></i> <strong th:text="${teacher.expYear}">3</strong> năm kinh nghiệm</span>
+                                <span><i class="fa-solid fa-envelope" aria-hidden="true"></i> <span th:text="${teacher.email}">email</span></span>
+                            </div>
+
+                            <a th:href="@{'/teachers/' + ${teacher.id}}" class="teacher-vita-card__link">
+                                Xem thông tin & lớp dạy <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{components/footer :: footer}"></div>
+</body>
+</html>

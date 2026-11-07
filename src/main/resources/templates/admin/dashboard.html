@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng quan vận hành - VITA Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-shell.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body class="admin-dashboard-body">
+    <div th:replace="~{layouts/admin_nav :: admin_nav}"></div>
+
+    <div class="control-dashboard">
+        <div th:if="${success}" class="alert alert-success" style="background:#d4edda;color:#155724;padding:12px;margin:15px 0;border-radius:8px;">
+            <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="alert alert-error" style="background:#f8d7da;color:#721c24;padding:12px;margin:15px 0;border-radius:8px;">
+            <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+        </div>
+
+        <header class="control-dashboard__header">
+            <div>
+                <span class="control-eyebrow"><i class="fa-solid fa-circle" aria-hidden="true"></i> Trung tâm vận hành</span>
+                <h1>Chào mừng trở lại, <span th:text="${currentUser != null ? (currentUser.name ?: currentUser.userName) : 'Quản trị viên'}">Admin</span>.</h1>
+                <p>Tổng quan hoạt động của VITA Yoga Center tại thời điểm hiện tại.</p>
+            </div>
+            <div class="control-header-actions">
+                <span class="control-current-date">
+                    <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                    <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy')}">02/11/2026</span>
+                </span>
+                <a th:href="@{/admin/registrations(status='PENDING')}" class="control-primary-action">
+                    <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                    Xử lý đơn chờ duyệt
+                    <span th:if="${stats.pending_registrations > 0}" th:text="${stats.pending_registrations}">0</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Date Filter Toolbar -->
+        <div style="background: white; border-radius: 14px; padding: 18px 24px; box-shadow: 0 4px 16px rgba(16, 55, 47, 0.05); border: 1px solid #e2ece9; margin-bottom: 24px;">
+            <form method="GET" th:action="@{/admin/dashboard}" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin: 0;">
+                <!-- Quick filter pills -->
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="font-size: 13px; font-weight: 700; color: #10372f; margin-right: 4px; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-filter" style="color: #2e7d32;"></i> Lọc theo thời gian:
+                    </span>
+                    <a th:href="@{/admin/dashboard(range='all')}" 
+                       th:style="${selectedRange == 'all' ? 'background: #10372f; color: white; font-weight: 700;' : 'background: #f1f5f9; color: #475569;'} + ' padding: 6px 14px; border-radius: 20px; font-size: 13px; text-decoration: none; transition: all 0.2s;'">
+                        Tất cả
+                    </a>
+                    <a th:href="@{/admin/dashboard(range='today')}" 
+                       th:style="${selectedRange == 'today' ? 'background: #10372f; color: white; font-weight: 700;' : 'background: #f1f5f9; color: #475569;'} + ' padding: 6px 14px; border-radius: 20px; font-size: 13px; text-decoration: none; transition: all 0.2s;'">
+                        Hôm nay
+                    </a>
+                    <a th:href="@{/admin/dashboard(range='7days')}" 
+                       th:style="${selectedRange == '7days' ? 'background: #10372f; color: white; font-weight: 700;' : 'background: #f1f5f9; color: #475569;'} + ' padding: 6px 14px; border-radius: 20px; font-size: 13px; text-decoration: none; transition: all 0.2s;'">
+                        7 ngày qua
+                    </a>
+                    <a th:href="@{/admin/dashboard(range='30days')}" 
+                       th:style="${selectedRange == '30days' ? 'background: #10372f; color: white; font-weight: 700;' : 'background: #f1f5f9; color: #475569;'} + ' padding: 6px 14px; border-radius: 20px; font-size: 13px; text-decoration: none; transition: all 0.2s;'">
+                        30 ngày qua
+                    </a>
+                    <a th:href="@{/admin/dashboard(range='this_month')}" 
+                       th:style="${selectedRange == 'this_month' ? 'background: #10372f; color: white; font-weight: 700;' : 'background: #f1f5f9; color: #475569;'} + ' padding: 6px 14px; border-radius: 20px; font-size: 13px; text-decoration: none; transition: all 0.2s;'">
+                        Tháng này
+                    </a>
+                </div>
+
+                <!-- Custom Date Range Form -->
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <input type="hidden" name="range" value="custom">
+                    <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #64748b;">
+                        <span>Từ:</span>
+                        <input type="date" name="from_date" th:value="${fromDate}" style="padding: 6px 10px; border: 1px solid #cce3de; border-radius: 8px; font-size: 13px; color: #334155;">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #64748b;">
+                        <span>Đến:</span>
+                        <input type="date" name="to_date" th:value="${toDate}" style="padding: 6px 10px; border: 1px solid #cce3de; border-radius: 8px; font-size: 13px; color: #334155;">
+                    </div>
+                    <button type="submit" style="background: #10372f; color: white; border: none; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-magnifying-glass"></i> Lọc ngày
+                    </button>
+                    <a th:if="${selectedRange != 'all'}" th:href="@{/admin/dashboard}" style="color: #64748b; font-size: 13px; text-decoration: underline; margin-left: 4px;">
+                        Đặt lại
+                    </a>
+                </div>
+            </form>
+
+            <!-- Filter Status Banner if active -->
+            <div th:if="${selectedRange != 'all'}" style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed #e2ece9; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+                <span style="color: #10372f; font-weight: 600;">
+                    <i class="fa-solid fa-circle-info" style="color: #0284c7;"></i>
+                    Đang hiển thị thống kê theo kỳ lọc: <strong th:text="${stats.registrations}">0</strong> đơn đăng ký phát sinh
+                </span>
+                <span style="color: #16a34a; font-weight: 700;">
+                    Doanh thu kỳ lọc: <span th:text="${#numbers.formatDecimal(stats.revenue, 0, 'POINT', 0, 'COMMA') + ' đ'}">0 đ</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <section class="control-kpis" aria-label="Chỉ số tổng quan">
+            <article class="control-kpi control-kpi--classes">
+                <div class="control-kpi__top">
+                    <span><i class="fa-solid fa-spa" aria-hidden="true"></i></span>
+                    <small>Lớp Yoga</small>
+                </div>
+                <strong th:text="${stats.classes}">0</strong>
+                <footer>
+                    <span>Đang có trong hệ thống</span>
+                    <a th:href="@{/admin/classes}" aria-label="Quản lý lớp Yoga"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </footer>
+            </article>
+
+            <article class="control-kpi control-kpi--customers">
+                <div class="control-kpi__top">
+                    <span><i class="fa-solid fa-users" aria-hidden="true"></i></span>
+                    <small>Học viên</small>
+                </div>
+                <strong th:text="${stats.customers}">0</strong>
+                <footer>
+                    <span>Hồ sơ học viên</span>
+                    <a th:href="@{/admin/customers}" aria-label="Quản lý học viên"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </footer>
+            </article>
+
+            <article class="control-kpi control-kpi--teachers">
+                <div class="control-kpi__top">
+                    <span><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i></span>
+                    <small>Giáo viên Yoga</small>
+                </div>
+                <strong th:text="${stats.teachers}">0</strong>
+                <footer>
+                    <span>Đội ngũ giảng dạy</span>
+                    <a th:href="@{/admin/teachers}" aria-label="Quản lý giáo viên"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </footer>
+            </article>
+
+            <article class="control-kpi control-kpi--registrations">
+                <div class="control-kpi__top">
+                    <span><i class="fa-regular fa-file-lines" aria-hidden="true"></i></span>
+                    <small>Tổng đăng ký</small>
+                </div>
+                <strong th:text="${stats.registrations}">0</strong>
+                <footer>
+                    <span th:text="${stats.pending_registrations + ' đơn cần xử lý'}">0 đơn cần xử lý</span>
+                    <a th:href="@{/admin/registrations}" aria-label="Quản lý đơn đăng ký"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </footer>
+            </article>
+        </section>
+
+        <!-- Real-time Analytics & Charts Section -->
+        <section class="control-analytics" id="dashboardAnalytics" th:attr="data-endpoint=@{/admin/dashboard/analytics}" aria-labelledby="analyticsTitle">
+            <header class="control-analytics__header">
+                <div>
+                    <span class="control-eyebrow"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i> Phân tích vận hành</span>
+                    <h2 id="analyticsTitle">Sức khỏe trung tâm qua dữ liệu</h2>
+                    <p>Theo dõi tăng trưởng học viên, lớp học, phân bổ giảng dạy và doanh số đã xác nhận.</p>
+                </div>
+                <label class="control-chart-filter">
+                    <span>Khoảng phân tích</span>
+                    <select id="analyticsPeriod" aria-label="Chọn khoảng thời gian phân tích">
+                        <option value="30">30 ngày qua</option>
+                        <option value="90" selected>90 ngày qua</option>
+                        <option value="180">6 tháng qua</option>
+                        <option value="365">12 tháng qua</option>
+                    </select>
+                </label>
+            </header>
+
+            <div class="control-analytics__notice" id="analyticsNotice" role="status" aria-live="polite">
+                <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Đang tổng hợp dữ liệu...
+            </div>
+
+            <div class="control-analytics__grid" aria-busy="true">
+                <!-- Forecast Revenue Card -->
+                <article class="control-forecast-card" id="revenueForecastCard">
+                    <div class="control-forecast-card__icon"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></div>
+                    <div class="control-forecast-card__main">
+                        <span>Doanh số dự tính tháng hiện tại</span>
+                        <strong id="forecastRevenue">0 ₫</strong>
+                        <small id="forecastMethod">Đang tính từ tiến độ doanh số trong tháng...</small>
+                    </div>
+                    <div class="control-forecast-card__actual">
+                        <small>Đã ghi nhận</small>
+                        <strong id="currentMonthRevenue">0 ₫</strong>
+                        <span id="forecastProgress">0/0 ngày</span>
+                    </div>
+                    <div class="control-forecast-card__comparison">
+                        <small id="previousMonthLabel">So với tháng trước</small>
+                        <strong id="previousMonthRevenue">0 ₫</strong>
+                        <span class="is-flat" id="forecastChange"><i class="fa-solid fa-minus" aria-hidden="true"></i> 0%</span>
+                    </div>
+                </article>
+
+                <!-- Growth Donut Charts -->
+                <article class="control-chart-card control-chart-card--growth">
+                    <div class="control-chart-card__heading">
+                        <div><span>Tốc độ mở rộng</span><h3>Tăng trưởng mới</h3></div>
+                        <small id="growthPeriodLabel">90 ngày qua</small>
+                    </div>
+                    <div class="control-growth-charts">
+                        <div class="control-growth-metric" id="customerGrowthChart"></div>
+                        <div class="control-growth-metric" id="classGrowthChart"></div>
+                    </div>
+                </article>
+
+                <!-- Class Lifecycle Donut Chart -->
+                <article class="control-chart-card control-chart-card--lifecycle">
+                    <div class="control-chart-card__heading">
+                        <div><span>Trạng thái hiện tại</span><h3>Vòng đời lớp Yoga</h3></div>
+                        <a th:href="@{/admin/classes}">Quản lý lớp <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="control-lifecycle-chart" id="classLifecycleChart"></div>
+                </article>
+
+                <!-- Teacher Workload Columns Chart -->
+                <article class="control-chart-card control-chart-card--teachers">
+                    <div class="control-chart-card__heading">
+                        <div><span>Phân bổ nguồn lực</span><h3>Tỷ lệ đứng lớp của giáo viên</h3></div>
+                        <small id="teacherAssignmentTotal">0 lượt phân công</small>
+                    </div>
+                    <div class="control-column-chart" id="teacherChart" aria-label="Biểu đồ tỷ lệ đứng lớp của giáo viên"></div>
+                </article>
+
+                <!-- Revenue Columns Chart -->
+                <article class="control-chart-card control-chart-card--revenue">
+                    <div class="control-chart-card__heading">
+                        <div><span>Đơn đã xác nhận</span><h3>Doanh số theo tháng</h3></div>
+                        <label class="control-chart-filter control-chart-filter--compact">
+                            <span class="sr-only">Khoảng thời gian doanh số</span>
+                            <select id="revenuePeriod" aria-label="Chọn khoảng thời gian doanh số">
+                                <option value="6" selected>6 tháng</option>
+                                <option value="12">12 tháng</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="control-revenue-summary">
+                        <div><small>Tổng trong kỳ</small><strong id="revenueTotal">0 ₫</strong></div>
+                        <div><small>Trung bình/tháng</small><strong id="revenueAverage">0 ₫</strong></div>
+                    </div>
+                    <div class="control-column-chart control-column-chart--revenue" id="revenueChart" aria-label="Biểu đồ doanh số theo tháng"></div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Lower Grid: Recent Registrations & Status Progress Side -->
+        <div class="control-dashboard__grid">
+            <section class="control-panel control-recent">
+                <div class="control-panel__heading">
+                    <div><span>Hoạt động mới</span><h2>Đăng ký gần đây</h2></div>
+                    <a th:href="@{/admin/registrations}">Xem tất cả <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+
+                <div class="control-registration-list">
+                    <div th:if="${recentRegistrations == null || recentRegistrations.empty}" class="control-empty-state">
+                        <span><i class="fa-regular fa-folder-open" aria-hidden="true"></i></span>
+                        <strong>Chưa có đơn đăng ký</strong>
+                        <p>Các đơn mới sẽ xuất hiện tại đây.</p>
+                    </div>
+
+                    <article th:each="r : ${recentRegistrations}" class="control-registration-row">
+                        <span class="control-registration-row__avatar" th:text="${r.customer != null && !r.customer.name.isEmpty() ? #strings.substring(r.customer.name, 0, 1) : 'H'}">H</span>
+                        <div class="control-registration-row__main">
+                            <strong th:text="${r.customer != null ? r.customer.name : 'Học viên #' + r.customerId}">Học viên</strong>
+                            <span><i class="fa-solid fa-spa" aria-hidden="true"></i> <span th:text="${r.yogaClass != null ? r.yogaClass.name : 'Lớp #' + r.classId}">Lớp Yoga</span></span>
+                        </div>
+                        <div class="control-registration-row__time">
+                            <strong th:text="${#temporals.format(r.createdAt != null ? r.createdAt : #temporals.createNow(), 'dd/MM/yyyy')}">02/11/2026</strong>
+                            <span th:text="${r.packageMonths + ' tháng'}">3 tháng</span>
+                        </div>
+                        <span class="control-status"
+                              th:classappend="${r.status == 'CONFIRMED' ? 'control-status--confirmed' : (r.status == 'CANCELLED' ? 'control-status--cancelled' : 'control-status--pending')}">
+                            <i th:class="${r.status == 'CONFIRMED' ? 'fa-solid fa-circle-check' : (r.status == 'CANCELLED' ? 'fa-solid fa-circle-xmark' : 'fa-solid fa-clock')}" aria-hidden="true"></i>
+                            <span th:text="${r.status == 'CONFIRMED' ? 'Đã duyệt' : (r.status == 'CANCELLED' ? 'Đã hủy' : 'Chờ duyệt')}">Chờ duyệt</span>
+                        </span>
+                        <a th:href="@{/admin/registrations/{id}(id=${r.id})}" class="control-registration-row__link" aria-label="Xem chi tiết"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </article>
+                </div>
+            </section>
+
+            <aside class="control-dashboard__side">
+                <section class="control-panel control-registration-overview">
+                    <div class="control-panel__heading">
+                        <div><span>Phân bổ trạng thái</span><h2>Đơn đăng ký</h2></div>
+                        <strong th:text="${stats.registrations}">0</strong>
+                    </div>
+
+                    <div class="control-status-list">
+                        <div>
+                            <div><span><i class="fa-regular fa-clock" aria-hidden="true"></i> Chờ duyệt</span><strong th:text="${stats.pending_registrations}">0</strong></div>
+                            <div class="control-progress"><span class="is-pending" th:style="'width: ' + ${stats.pending_percent} + '%'"></span></div>
+                            <small th:text="${stats.pending_percent + '% tổng số đơn'}">0% tổng số đơn</small>
+                        </div>
+                        <div>
+                            <div><span><i class="fa-regular fa-circle-check" aria-hidden="true"></i> Đã duyệt</span><strong th:text="${stats.approved_registrations}">0</strong></div>
+                            <div class="control-progress"><span class="is-confirmed" th:style="'width: ' + ${stats.confirmed_percent} + '%'"></span></div>
+                            <small th:text="${stats.confirmed_percent + '% tổng số đơn'}">0% tổng số đơn</small>
+                        </div>
+                        <div>
+                            <div><span><i class="fa-regular fa-circle-xmark" aria-hidden="true"></i> Đã hủy</span><strong th:text="${stats.cancelled_registrations}">0</strong></div>
+                            <div class="control-progress"><span class="is-cancelled" th:style="'width: ' + ${stats.cancelled_percent} + '%'"></span></div>
+                            <small th:text="${stats.cancelled_percent + '% tổng số đơn'}">0% tổng số đơn</small>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="control-quick-actions">
+                    <div><span>Thao tác nhanh</span><h2>Tạo dữ liệu mới</h2></div>
+                    <a th:href="@{/admin/classes/create}"><span><i class="fa-solid fa-spa" aria-hidden="true"></i></span><p><strong>Thêm lớp Yoga</strong><small>Tạo lịch học mới</small></p><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    <a th:href="@{/admin/registrations}"><span><i class="fa-regular fa-file-lines" aria-hidden="true"></i></span><p><strong>Xem đơn đăng ký</strong><small>Duyệt & xử lý đơn</small></p><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    <a th:href="@{/admin/teachers}"><span><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i></span><p><strong>Quản lý giáo viên</strong><small>Cập nhật đội ngũ</small></p><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin-dashboard.js}"></script>
+</body>
+</html>

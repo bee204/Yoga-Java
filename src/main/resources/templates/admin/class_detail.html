@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${class.name} + ' - VITA Admin'">Chi tiết lớp học - VITA Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-shell.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-class-detail.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body class="admin-body">
+    <div th:replace="~{layouts/admin_nav :: admin_nav}"></div>
+
+    <main class="admin-main" style="max-width: 1200px; margin: 30px auto; padding: 0 20px;">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <a th:href="${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER') ? '/teacher/dashboard' : '/admin/classes'}" style="color: #10372f; text-decoration: none; font-weight: 600;">
+                <i class="fa-solid fa-arrow-left"></i> <span th:text="${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER') ? 'Cổng giáo viên' : 'Danh sách lớp Yoga'}">Quay lại</span>
+            </a>
+            <div style="display: flex; gap: 10px;">
+                <a th:href="@{${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER') ? '/teacher/classes/' + class.id + '/attendance' : '/admin/classes/' + class.id + '/attendance'}}" style="background: #e0f2fe; color: #0284c7; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px;">
+                    <i class="fa-solid fa-clipboard-user"></i> Điểm danh
+                </a>
+                <a th:href="@{${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER') ? '/teacher/classes/' + class.id + '/reviews' : '/admin/classes/' + class.id + '/reviews'}}" style="background: #fef3c7; color: #d97706; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px;">
+                    <i class="fa-solid fa-star"></i> Đánh giá
+                </a>
+                <a th:if="${currentUser == null || (currentUser.role != 'teacher' && currentUser.role != 'TEACHER')}" th:href="@{'/admin/classes/' + ${class.id} + '/edit'}" style="background: #10372f; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px;">
+                    <i class="fa-regular fa-pen-to-square"></i> Chỉnh sửa
+                </a>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+            <div>
+                <!-- Hero Info -->
+                <div style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #e2ece9; margin-bottom: 24px;">
+                    <span style="font-size: 12px; font-weight: 700; color: #166534; background: #dcfce7; padding: 4px 10px; border-radius: 20px; text-transform: uppercase;">Lớp học Yoga</span>
+                    <h1 style="color: #10372f; margin: 12px 0 8px 0; font-size: 26px;" th:text="${class.name}">Yoga Cơ Bản</h1>
+                    <p style="color: #64748b; font-size: 14px; margin: 0 0 20px 0;">
+                        Lịch học: <strong th:text="${class.lichHoc}">2-4-6</strong> · 
+                        Khung giờ: <strong th:text="${#temporals.format(class.startTime, 'HH:mm') + ' - ' + #temporals.format(class.endTime, 'HH:mm')}">06:00 - 07:30</strong>
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; background: #f8faf9; padding: 16px; border-radius: 10px; border: 1px solid #eef2f0;">
+                        <div>
+                            <small style="color: #64748b; display: block; font-size: 12px;">Học phí / tháng</small>
+                            <strong style="color: #10372f; font-size: 18px;" th:text="${#numbers.formatDecimal(class.price, 0, 'POINT', 0, 'COMMA')} + 'đ'">600.000đ</strong>
+                        </div>
+                        <div>
+                            <small style="color: #64748b; display: block; font-size: 12px;">Địa điểm</small>
+                            <strong style="color: #10372f; font-size: 14px;" th:text="${class.location}">Phòng 101</strong>
+                        </div>
+                        <div>
+                            <small style="color: #64748b; display: block; font-size: 12px;">Thời hạn</small>
+                            <strong style="color: #10372f; font-size: 14px;" th:text="${#temporals.format(class.startDate, 'dd/MM/yyyy') + ' - ' + #temporals.format(class.endDate, 'dd/MM/yyyy')}">01/01 - 31/03</strong>
+                        </div>
+                    </div>
+
+                    <div th:if="${class.description}" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #f1f5f9;">
+                        <h4 style="margin: 0 0 6px 0; font-size: 14px; color: #334155;">Mô tả chi tiết</h4>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin: 0;" th:text="${class.description}">Giới thiệu lớp học...</p>
+                    </div>
+                </div>
+
+                <!-- Enrolled Students -->
+                <div style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="font-size: 18px; color: #10372f; margin: 0;">Danh sách học viên đăng ký</h2>
+                        <span style="background: #e2ece9; color: #10372f; font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 20px;" th:text="${registrations.size()} + ' học viên'">0 học viên</span>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(registrations)}" style="text-align: center; padding: 40px 20px; color: #94a3b8;">
+                        <i class="fa-regular fa-folder-open" style="font-size: 36px; margin-bottom: 10px; display: block;"></i>
+                        Chưa có học viên nào đăng ký lớp học này.
+                    </div>
+
+                    <table th:if="${!#lists.isEmpty(registrations)}" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e2ece9; color: #64748b;">
+                                <th style="padding: 10px;">Mã đơn</th>
+                                <th style="padding: 10px;">Học viên</th>
+                                <th style="padding: 10px;">Gói học</th>
+                                <th style="padding: 10px;">Học phí</th>
+                                <th style="padding: 10px;">Trạng thái</th>
+                                <th style="padding: 10px; text-align: right;">Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="r : ${registrations}" style="border-bottom: 1px solid #f1f5f9;">
+                                <td style="padding: 12px 10px; font-weight: 600;" th:text="'#' + ${r.id}">#1</td>
+                                <td style="padding: 12px 10px;">
+                                    <strong th:text="${r.customer != null ? r.customer.name : 'Học viên'}">Nguyễn Văn A</strong>
+                                    <small style="display: block; color: #94a3b8;" th:text="${r.customer != null ? r.customer.phone : ''}">0900000000</small>
+                                </td>
+                                <td style="padding: 12px 10px;" th:text="${r.packageMonths} + ' tháng'">1 tháng</td>
+                                <td style="padding: 12px 10px; font-weight: 600; color: #10372f;" th:text="${r.finalPrice != null ? #numbers.formatDecimal(r.finalPrice, 0, 'POINT', 0, 'COMMA') + 'đ' : '-'}">600.000đ</td>
+                                <td style="padding: 12px 10px;">
+                                    <span th:if="${r.status == 'CONFIRMED'}" style="background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">Đã duyệt</span>
+                                    <span th:if="${r.status == 'PENDING'}" style="background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">Chờ duyệt</span>
+                                    <span th:if="${r.status == 'CANCELLED'}" style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">Đã hủy</span>
+                                </td>
+                                <td style="padding: 12px 10px; text-align: right;">
+                                    <a th:if="${currentUser == null || (currentUser.role != 'teacher' && currentUser.role != 'TEACHER')}" th:href="@{'/admin/registrations/' + ${r.id}}" style="color: #10372f; font-size: 14px;"><i class="fa-solid fa-arrow-right"></i></a>
+                                    <span th:if="${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER')}" style="color: #94a3b8; font-size: 12px;"><i class="fa-solid fa-check"></i></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <aside>
+                <!-- Capacity Card -->
+                <div style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #e2ece9; margin-bottom: 24px;">
+                    <h3 style="font-size: 16px; color: #10372f; margin: 0 0 15px 0;">Sức chứa lớp</h3>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-size: 14px; color: #64748b;">Đã đăng ký:</span>
+                        <strong style="color: #10372f;" th:text="${registrations.size()} + ' / ' + ${class.quantity} + ' học viên'">0 / 20 học viên</strong>
+                    </div>
+                    <div style="background: #f1f5f9; border-radius: 8px; height: 10px; overflow: hidden; margin-bottom: 12px;">
+                        <div style="background: #10372f; height: 100%; border-radius: 8px;" th:style="'width: ' + (${class.quantity > 0 ? (registrations.size() * 100 / class.quantity) : 0}) + '%;'"></div>
+                    </div>
+                    <p style="font-size: 13px; color: #64748b; margin: 0;">
+                        Tối đa <strong th:text="${class.quantity}">20</strong> học viên/lớp để đảm bảo chất lượng hướng dẫn.
+                    </p>
+                </div>
+
+                <!-- Teacher Card -->
+                <div style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+                    <h3 style="font-size: 16px; color: #10372f; margin: 0 0 15px 0;">Giáo viên phụ trách</h3>
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background: #e2ece9; overflow: hidden; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #10372f; font-size: 18px;">
+                            <img th:if="${class.teacher != null and class.teacher.avatar != null and !#strings.isEmpty(class.teacher.avatar)}" th:src="@{'/img/authors/' + ${class.teacher.avatar}}" style="width: 100%; height: 100%; object-fit: cover;" alt="Avatar">
+                            <span th:unless="${class.teacher != null and class.teacher.avatar != null and !#strings.isEmpty(class.teacher.avatar)}" th:text="${class.teacher != null ? #strings.substring(class.teacher.name, 0, 1) : 'G'}">G</span>
+                        </div>
+                        <div>
+                            <strong style="font-size: 15px; color: #10372f; display: block;" th:text="${class.teacher != null ? class.teacher.name : 'Chưa phân công'}">HLV Yoga</strong>
+                            <small style="color: #64748b;" th:text="${class.teacher != null ? class.teacher.phone : ''}">0901234567</small>
+                        </div>
+                    </div>
+                    <div th:if="${class.teacher != null && (currentUser == null || (currentUser.role != 'teacher' && currentUser.role != 'TEACHER'))}" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f1f5f9;">
+                        <a th:href="@{'/admin/teachers/' + ${class.teacher.id}}" style="color: #10372f; font-size: 13px; font-weight: 600; text-decoration: none;">
+                            Xem hồ sơ giáo viên <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>

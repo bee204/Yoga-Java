@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>VITA Yoga Center - Sổ Tay Hướng Dẫn Cài Đặt & Vận Hành Hệ Thống</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 20mm 16mm;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    line-height: 1.6;
+    font-size: 10.5pt;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* UTILITIES & PAGE BREAKS */
+  .page-break { page-break-before: always; }
+  .no-break { page-break-inside: avoid; }
+
+  /* ========================================================= */
+  /* TRANG BÌA (COVER PAGE) */
+  /* ========================================================= */
+  .cover-page {
+    height: 100vh;
+    max-height: 255mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 3px solid #10372f;
+    outline: 1px solid #2e7d32;
+    outline-offset: 4px;
+    border-radius: 8px;
+    padding: 35mm 20mm 25mm;
+    text-align: center;
+    position: relative;
+    background: radial-gradient(circle at top right, #f4fbf7, #ffffff 70%);
+    page-break-after: always;
+  }
+  .cover-badge-top {
+    font-size: 12pt;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: #10372f;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .cover-logo-icon {
+    width: 68px;
+    height: 68px;
+    margin: 15px auto;
+    background: #10372f;
+    color: #4ade80;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-size: 32px;
+    box-shadow: 0 8px 24px rgba(16, 55, 47, 0.2);
+  }
+  .cover-title-box {
+    margin: 25px 0;
+  }
+  .cover-main-title {
+    font-size: 26pt;
+    font-weight: 900;
+    line-height: 1.3;
+    color: #10372f;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .cover-subtitle {
+    font-size: 13pt;
+    color: #334155;
+    font-weight: 600;
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+  .cover-divider {
+    width: 120px;
+    height: 4px;
+    background: #2e7d32;
+    margin: 20px auto;
+    border-radius: 2px;
+  }
+  .cover-info-card {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 16px 24px;
+    text-align: left;
+    max-width: 520px;
+    margin: 20px auto 0;
+    font-size: 10pt;
+  }
+  .cover-info-card table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .cover-info-card td {
+    padding: 6px 4px;
+    vertical-align: top;
+  }
+  .cover-info-card td:first-child {
+    font-weight: 700;
+    color: #10372f;
+    width: 38%;
+  }
+  .cover-footer-text {
+    font-size: 9pt;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 15px;
+  }
+
+  /* ========================================================= */
+  /* TRANG MỤC LỤC (TABLE OF CONTENTS) */
+  /* ========================================================= */
+  .toc-page {
+    page-break-after: always;
+    padding-top: 10mm;
+  }
+  .section-title-major {
+    font-size: 18pt;
+    font-weight: 800;
+    color: #10372f;
+    border-bottom: 2px solid #10372f;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toc-list {
+    list-style: none;
+    margin-top: 15px;
+  }
+  .toc-item {
+    margin-bottom: 14px;
+  }
+  .toc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .toc-row a {
+    color: inherit;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .toc-dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted #94a3b8;
+    margin: 0 10px;
+  }
+  .toc-page-num {
+    font-weight: 800;
+    color: #10372f;
+    flex-shrink: 0;
+  }
+  .toc-sublist {
+    list-style: none;
+    padding-left: 24px;
+    margin-top: 6px;
+  }
+  .toc-subitem {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 9.5pt;
+    color: #475569;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  /* ========================================================= */
+  /* CHƯƠNG & KHUNG NỘI DUNG CHUẨN IN */
+  /* ========================================================= */
+  .chapter-header {
+    background: #10372f;
+    color: #ffffff;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    page-break-inside: avoid;
+  }
+  .chapter-badge {
+    font-size: 9pt;
+    font-weight: 800;
+    background: rgba(74, 222, 128, 0.2);
+    color: #86efac;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+  }
+  .chapter-title {
+    font-size: 15pt;
+    font-weight: 800;
+    color: #ffffff;
+    margin-top: 4px;
+  }
+
+  /* CONTENT CARDS */
+  .doc-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+  }
+  .doc-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 8px;
+  }
+  .doc-card-title {
+    font-size: 12.5pt;
+    font-weight: 750;
+    color: #10372f;
+  }
+
+  /* SCREENSHOT CONTAINERS (ĐẢM BẢO KHÔNG BỊ CẮT VỠ) */
+  .screenshot-wrapper {
+    background: #ffffff;
+    border: 1.5px solid #94a3b8;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0 18px 0;
+    page-break-inside: avoid;
+  }
+  .browser-header-mock {
+    background: #0f172a;
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .browser-circle-dots {
+    display: flex;
+    gap: 5px;
+  }
+  .browser-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+  .b-red { background: #ef4444; }
+  .b-yellow { background: #f59e0b; }
+  .b-green { background: #10b981; }
+  .browser-url-bar {
+    background: #1e293b;
+    color: #e2e8f0;
+    font-size: 9pt;
+    font-family: Consolas, monospace;
+    padding: 2px 12px;
+    border-radius: 4px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid #334155;
+  }
+  .screenshot-visual {
+    width: 100%;
+    max-height: 340px;
+    object-fit: contain;
+    background: #f8fafc;
+    display: block;
+    border-bottom: 1px solid #cbd5e1;
+  }
+  .screenshot-caption-box {
+    background: #f8fafc;
+    padding: 8px 14px;
+    font-size: 9pt;
+    color: #334155;
+    font-weight: 500;
+  }
+  .screenshot-caption-box b {
+    color: #0369a1;
+  }
+
+  /* DATA TABLES */
+  .clean-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 9pt;
+    page-break-inside: avoid;
+  }
+  .clean-table th {
+    background: #10372f;
+    color: #ffffff;
+    font-weight: 700;
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid #10372f;
+  }
+  .clean-table td {
+    padding: 7px 10px;
+    border: 1px solid #cbd5e1;
+    vertical-align: middle;
+  }
+  .clean-table tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  /* CALLOUTS */
+  .callout-box {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 14px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+  }
+  .callout-success {
+    background: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    color: #166534;
+  }
+  .callout-info {
+    background: #f0f9ff;
+    border-left: 4px solid #0284c7;
+    color: #0369a1;
+  }
+  .callout-warning {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    color: #92400e;
+  }
+
+  /* CODE BOXES */
+  .code-display {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 8.5pt;
+    line-height: 1.5;
+    margin: 10px 0;
+    page-break-inside: avoid;
+  }
+  .code-cmd { color: #38bdf8; font-weight: bold; }
+  .code-val { color: #fde047; }
+  .code-cmt { color: #94a3b8; font-style: italic; }
+
+  /* BADGES */
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 8pt;
+    font-weight: 700;
+  }
+  .pill-green { background: #dcfce7; color: #166534; }
+  .pill-blue { background: #e0f2fe; color: #0369a1; }
+  .pill-amber { background: #fef3c7; color: #92400e; }
+  .pill-red { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body>
+
+<!-- ====================================================================== -->
+<!-- 1. TRANG BÌA CHÍNH THỨC (COVER PAGE) -->
+<!-- ====================================================================== -->
+<div class="cover-page">
+  <div class="cover-badge-top">
+    <i class="fa-solid fa-leaf" style="color: #2e7d32;"></i>
+    TRUNG TÂM YOGA CHUYÊN NGHIỆP VITA · JAVA PLATFORM
+  </div>
+
+  <div class="cover-title-box">
+    <div class="cover-logo-icon">
+      <i class="fa-solid fa-spa"></i>
+    </div>
+    <h1 class="cover-main-title">SỔ TAY HƯỚNG DẪN CÀI ĐẶT,<br>CẤU HÌNH & VẬN HÀNH HỆ THỐNG</h1>
+    <div class="cover-divider"></div>
+    <p class="cover-subtitle">
+      Tài liệu đặc tả kiến trúc, quy trình nghiệp vụ và hướng dẫn sử dụng toàn diện dành cho Học viên, Giáo viên Yoga và Quản trị viên
+    </p>
+  </div>
+
+  <div>
+    <div class="cover-info-card">
+      <table>
+        <tr>
+          <td>Đồ Án / Đề Tài:</td>
+          <td><b>Hệ Thống Quản Lý & Đào Tạo VITA Yoga</b></td>
+        </tr>
+        <tr>
+          <td>Môi Trường Công Nghệ:</td>
+          <td><b>Java 17 LTS · Spring Boot 3.4.11 · Spring Security 6</b></td>
+        </tr>
+        <tr>
+          <td>Cơ Sở Dữ Liệu:</td>
+          <td><b>MySQL 8.x (XAMPP 3306) & H2 In-Memory Database</b></td>
+        </tr>
+        <tr>
+          <td>Giao Diện Người Dùng:</td>
+          <td><b>Thymeleaf Server-Side Rendering · Responsive</b></td>
+        </tr>
+        <tr>
+          <td>Phiên Bản Tài Liệu:</td>
+          <td><b>Release 1.0.0 (Bản Chính Thức Đã Kiểm Thử)</b></td>
+        </tr>
+        <tr>
+          <td>Thời Gian Ban Hành:</td>
+          <td><b>Tháng 11 / 2026</b></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="cover-footer-text">
+      © 2026 VITA Yoga System. Bảo lưu toàn quyền xuất bản và lưu hành nội bộ đồ án.
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 2. TRANG MỤC LỤC CHI TIẾT (TABLE OF CONTENTS) -->
+<!-- ====================================================================== -->
+<div class="toc-page">
+  <h2 class="section-title-major"><i class="fa-solid fa-list-check" style="color: #2e7d32;"></i> MỤC LỤC NỘI DUNG TÀI LIỆU</h2>
+
+  <ul class="toc-list">
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>LỜI MỞ ĐẦU & TỔNG QUAN HỆ THỐNG VITA YOGA</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 3</span>
+      </div>
+    </li>
+
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>CHƯƠNG I: HƯỚNG DẪN CÀI ĐẶT & KHỞI CHẠY (5 BƯỚC CHUẨN HÓA)</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 4</span>
+      </div>
+      <ul class="toc-sublist">
+        <li class="toc-subitem"><span>1.1. Yêu cầu môi trường tiên quyết (Java 17, Maven 3.9, XAMPP)</span><span class="toc-dots"></span><span>4</span></li>
+        <li class="toc-subitem"><span>1.2. Cách 1: Khởi chạy nhanh với Database H2 In-Memory</span><span class="toc-dots"></span><span>4</span></li>
+        <li class="toc-subitem"><span>1.3. Cách 2: Khởi chạy với Cơ sở dữ liệu MySQL thật (XAMPP)</span><span class="toc-dots"></span><span>5</span></li>
+        <li class="toc-subitem"><span>1.4. Cơ chế Seeder tự động nạp dữ liệu mẫu sạch UTF-8</span><span class="toc-dots"></span><span>6</span></li>
+      </ul>
+    </li>
+
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>CHƯƠNG II: QUẢN TRỊ TÀI KHOẢN MẪU & BẢO MẬT PHÂN QUYỀN (RBAC)</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 7</span>
+      </div>
+      <ul class="toc-sublist">
+        <li class="toc-subitem"><span>2.1. Danh mục 7 tài khoản mẫu có sẵn (Mật khẩu chung 123456)</span><span class="toc-dots"></span><span>7</span></li>
+        <li class="toc-subitem"><span>2.2. Ma trận phân quyền 3 vai trò (ADMIN, TEACHER, CUSTOMER)</span><span class="toc-dots"></span><span>8</span></li>
+      </ul>
+    </li>
+
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>CHƯƠNG III: CỔNG HỌC VIÊN & QUY TRÌNH TƯƠNG TÁC (USER SITE)</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 9</span>
+      </div>
+      <ul class="toc-sublist">
+        <li class="toc-subitem"><span>3.1. Đăng nhập học viên & Trang chủ trung tâm</span><span class="toc-dots"></span><span>9</span></li>
+        <li class="toc-subitem"><span>3.2. Tra cứu danh mục lớp học & Đội ngũ giáo viên</span><span class="toc-dots"></span><span>11</span></li>
+        <li class="toc-subitem"><span>3.3. Đăng ký khóa học, tính chiết khấu tự động</span><span class="toc-dots"></span><span>12</span></li>
+        <li class="toc-subitem"><span>3.4. Hồ sơ cá nhân (Zen Forest UI), đổi mật khẩu & Khóa học của tôi</span><span class="toc-dots"></span><span>13</span></li>
+        <li class="toc-subitem"><span>3.5. Cơ chế Đăng xuất an toàn điều hướng về Trang chủ (/?logout)</span><span class="toc-dots"></span><span>14</span></li>
+      </ul>
+    </li>
+
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>CHƯƠNG IV: CỔNG GIÁO VIÊN YOGA (TEACHER WORKSPACE)</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 15</span>
+      </div>
+      <ul class="toc-sublist">
+        <li class="toc-subitem"><span>4.1. Đăng nhập giáo viên riêng biệt (Split-screen Layout)</span><span class="toc-dots"></span><span>15</span></li>
+        <li class="toc-subitem"><span>4.2. Quản lý lịch dạy lớp phụ trách & Chi tiết học viên</span><span class="toc-dots"></span><span>16</span></li>
+        <li class="toc-subitem"><span>4.3. Bảng điểm danh buổi tập & Đọc đánh giá học viên</span><span class="toc-dots"></span><span>17</span></li>
+      </ul>
+    </li>
+
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>CHƯƠNG V: TRUNG TÂM QUẢN TRỊ HỆ THỐNG (ADMIN CONTROL CENTER)</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 18</span>
+      </div>
+      <ul class="toc-sublist">
+        <li class="toc-subitem"><span>5.1. Dashboard Quản trị & Bộ lọc ngày thời gian thực</span><span class="toc-dots"></span><span>18</span></li>
+        <li class="toc-subitem"><span>5.2. Quản lý & Phê duyệt đơn đăng ký một chạm</span><span class="toc-dots"></span><span>20</span></li>
+        <li class="toc-subitem"><span>5.3. Quản lý lớp học kèm bộ lọc từ khóa, giáo viên, lịch tập</span><span class="toc-dots"></span><span>21</span></li>
+        <li class="toc-subitem"><span>5.4. Quản lý giáo viên kèm bộ lọc số năm kinh nghiệm</span><span class="toc-dots"></span><span>22</span></li>
+        <li class="toc-subitem"><span>5.5. Quản lý học viên kèm bộ lọc đa tiêu chí & giới tính</span><span class="toc-dots"></span><span>23</span></li>
+      </ul>
+    </li>
+
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>CHƯƠNG VI: QUY TRÌNH NGHIỆP VỤ & CÔNG THỨC VẬN HÀNH</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 24</span>
+      </div>
+    </li>
+
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>CHƯƠNG VII: KIẾN TRÚC CƠ SỞ DỮ LIỆU & CẤU TRÚC MÃ NGUỒN</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 26</span>
+      </div>
+    </li>
+
+    <li class="toc-item">
+      <div class="toc-row">
+        <span>CHƯƠNG VIII: BÁO CÁO BỘ KIỂM THỬ TỰ ĐỘNG (37/37 PASS - 100%)</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">Trang 28</span>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 3. LỜI MỞ ĐẦU & TỔNG QUAN -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Giới Thiệu Đồ Án</span>
+      <h2 class="chapter-title">LỜI MỞ ĐẦU & TỔNG QUAN HỆ THỐNG</h2>
+    </div>
+    <i class="fa-solid fa-leaf" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-circle-info" style="color: #0284c7;"></i> Bối Cảnh & Mục Tiêu Dự Án</div>
+    </div>
+    <p style="text-align: justify; margin-bottom: 12px;">
+      Trong xu hướng chuyển đổi số mạnh mẽ của ngành thể thao và chăm sóc sức khỏe, việc quản lý một trung tâm Yoga đòi hỏi sự chính xác, minh bạch và tiện lợi cho cả ba nhóm đối tượng: <b>Học viên</b>, <b>Giáo viên hướng dẫn</b> và <b>Đội ngũ quản trị viên</b>.
+    </p>
+    <p style="text-align: justify; margin-bottom: 12px;">
+      Hệ thống <b>VITA Yoga Platform</b> được thiết kế và triển khai với mục tiêu chuyển đổi toàn diện từ kiến trúc mã nguồn mở PHP/Laravel sang nền tảng chuẩn công nghiệp <b>Java 17 LTS</b> và <b>Spring Boot 3.4.11</b>, kế thừa trọn vẹn toàn bộ 43 giao diện Blade sang hệ thống <b>Thymeleaf Server-Side Rendering</b>, đồng thời nâng cấp bảo mật đa vai trò bằng <b>Spring Security 6 RBAC</b>.
+    </p>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-cubes" style="color: #166534;"></i> Các Trụ Cột Nền Tảng Kỹ Thuật</div>
+    </div>
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Hạng Mục Công Nghệ</th>
+          <th>Thành Phần Sử Dụng</th>
+          <th>Vai Trò & Ưu Điểm Nổi Bật</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Ngôn Ngữ & Runtime</b></td>
+          <td>Java 17 LTS (HotSpot)</td>
+          <td>Hiệu năng cao, quản lý bộ nhớ chặt chẽ, hỗ trợ Records, Pattern Matching.</td>
+        </tr>
+        <tr>
+          <td><b>Core Framework</b></td>
+          <td>Spring Boot 3.4.11</td>
+          <td>Khởi chạy tự động, cấu hình tối thiểu, tích hợp Tomcat Server nhúng tại cổng 8080.</td>
+        </tr>
+        <tr>
+          <td><b>Bảo Mật & Phân Quyền</b></td>
+          <td>Spring Security 6</td>
+          <td>Kiểm soát quyền truy cập theo vai trò (Role-Based Access Control), mã hóa BCrypt.</td>
+        </tr>
+        <tr>
+          <td><b>Tương Tác Dữ Liệu</b></td>
+          <td>Spring Data JPA & Hibernate</td>
+          <td>Tự động ánh xạ 7 bảng thực thể (Entities), hỗ trợ cả MySQL và H2 In-Memory.</td>
+        </tr>
+        <tr>
+          <td><b>Giao Diện Hiển Thị</b></td>
+          <td>Thymeleaf 3 + Bootstrap Icons</td>
+          <td>Render mã HTML phía máy chủ (SSR), chống rò rỉ dữ liệu client, SEO tối ưu.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 4. CHƯƠNG I: HƯỚNG DẪN CÀI ĐẶT & KHỞI CHẠY (5 BƯỚC) -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Chương I</span>
+      <h2 class="chapter-title">HƯỚNG DẪN CÀI ĐẶT & CẤU HÌNH HỆ THỐNG</h2>
+    </div>
+    <i class="fa-solid fa-rocket" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-list-ol" style="color: #0369a1;"></i> 5 Bước Chuẩn Hóa Khởi Chạy Cho Người Mới Bắt Đầu</div>
+    </div>
+    
+    <div style="margin-bottom: 14px;">
+      <b style="color: #10372f; font-size: 11pt;">Bước 1: Kiểm tra môi trường máy tính</b>
+      <p style="font-size: 9.5pt; color: #475569;">Đảm bảo máy đã cài đặt Java 17 và Maven 3.9 trở lên bằng lệnh:</p>
+      <div class="code-display">
+        <span class="code-cmd">java</span> -version<br>
+        <span class="code-cmd">mvn</span> -version
+      </div>
+    </div>
+
+    <div style="margin-bottom: 14px;">
+      <b style="color: #10372f; font-size: 11pt;">Bước 2: Di chuyển vào thư mục dự án Yoga-Java</b>
+      <div class="code-display">
+        <span class="code-cmd">cd</span> <span class="code-val">"C:\Users\vuduy\Documents\Project\Yoga-Java"</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 14px;">
+      <b style="color: #10372f; font-size: 11pt;">Bước 3: Lựa chọn cơ sở dữ liệu phù hợp</b>
+      <p style="font-size: 9.5pt; color: #475569;">Hệ thống cung cấp 2 chế độ linh hoạt:</p>
+      
+      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; margin: 8px 0;">
+        <b style="color: #166534;"><i class="fa-solid fa-bolt"></i> Chế độ 1: Chạy nhanh với Database H2 In-Memory (Không cần cài MySQL)</b>
+        <p style="font-size: 9pt; color: #334155; margin-top: 4px;">Dùng cho kiểm tra nhanh, tự động nạp dữ liệu vào RAM, không lo đụng độ cổng:</p>
+        <div class="code-display">
+          <span class="code-cmd">mvn</span> spring-boot:run <span class="code-val">"-Dspring-boot.run.profiles=test"</span>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; margin: 8px 0;">
+        <b style="color: #0369a1;"><i class="fa-solid fa-database"></i> Chế độ 2: Chạy với Cơ sở dữ liệu MySQL thật (XAMPP 3306)</b>
+        <p style="font-size: 9pt; color: #334155; margin-top: 4px;">1. Mở XAMPP Control Panel, bật Start tại module <b>MySQL</b>.<br>2. Mở phpMyAdmin hoặc chạy lệnh tạo database:</p>
+        <div class="code-display">
+          <span class="code-cmd">CREATE DATABASE IF NOT EXISTS</span> <span class="code-val">yoga_management</span> <span class="code-cmd">CHARACTER SET</span> utf8mb4 <span class="code-cmd">COLLATE</span> utf8mb4_unicode_ci;
+        </div>
+        <p style="font-size: 9pt; color: #334155; margin-top: 4px;">3. Khởi chạy ứng dụng Spring Boot với cấu hình production mặc định:</p>
+        <div class="code-display">
+          <span class="code-cmd">mvn</span> spring-boot:run
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 14px;">
+      <b style="color: #10372f; font-size: 11pt;">Bước 4: Kiểm tra trạng thái máy chủ khởi động thành công</b>
+      <p style="font-size: 9.5pt; color: #475569;">Khi màn hình terminal hiển thị dòng thông báo:</p>
+      <div class="code-display">
+        <span class="code-val">Tomcat started on port 8080 (http) with context path '/'</span><br>
+        <span class="code-val">Started VitaApplication in 4.02 seconds</span>
+      </div>
+    </div>
+
+    <div>
+      <b style="color: #10372f; font-size: 11pt;">Bước 5: Mở trình duyệt và truy cập các cổng làm việc</b>
+      <ul style="font-size: 9.5pt; color: #334155; padding-left: 20px; margin-top: 6px;">
+        <li><b>Trang chủ học viên:</b> <code>http://localhost:8080/</code></li>
+        <li><b>Cổng làm việc giáo viên:</b> <code>http://localhost:8080/teacher/dashboard</code></li>
+        <li><b>Cổng quản trị hệ thống:</b> <code>http://localhost:8080/admin/login</code></li>
+        <li><b>API Ping kiểm tra:</b> <code>http://localhost:8080/api/ping</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 5. CHƯƠNG II: TÀI KHOẢN MẪU & PHÂN QUYỀN RBAC -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Chương II</span>
+      <h2 class="chapter-title">DANH MỤC TÀI KHOẢN MẪU & BẢO MẬT PHÂN QUYỀN</h2>
+    </div>
+    <i class="fa-solid fa-shield-halved" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-users-gear" style="color: #15803d;"></i> Danh Mục 7 Tài Khoản Mẫu Đã Nạp Sẵn Trong Hệ Thống</div>
+    </div>
+    <p style="font-size: 9.5pt; color: #475569; margin-bottom: 10px;">
+      Để tạo điều kiện thuận lợi nhất cho việc kiểm thử và chấm bài, hệ thống tích hợp sẵn Seeder tự động nạp 7 tài khoản tương ứng với 3 vai trò. <b>Mật khẩu mặc định cho toàn bộ các tài khoản là: <code>123456</code></b>.
+    </p>
+
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Vai Trò (Role)</th>
+          <th>Tên Đăng Nhập</th>
+          <th>Email Thay Thế</th>
+          <th>Mật Khẩu</th>
+          <th>Quyền Hạn & Cổng Truy Cập</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill pill-red">ROLE_ADMIN</span></td>
+          <td><b>admin</b></td>
+          <td>admin@vitayoga.vn</td>
+          <td><code>123456</code></td>
+          <td>Toàn quyền quản trị hệ thống tại <code>/admin/login</code> (Lớp, Giáo viên, Học viên, Duyệt đơn, Báo cáo).</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-amber">ROLE_TEACHER</span></td>
+          <td><b>teacher1</b></td>
+          <td>camtu@vitayoga.vn</td>
+          <td><code>123456</code></td>
+          <td>HLV Nguyễn Thị Cẩm Tú: Vào <code>/teacher/dashboard</code> xem lịch dạy, điểm danh lớp và đọc đánh giá.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-amber">ROLE_TEACHER</span></td>
+          <td><b>teacher2</b></td>
+          <td>thuhuong@vitayoga.vn</td>
+          <td><code>123456</code></td>
+          <td>HLV Nguyễn Thị Thu Hương: Quản lý các lớp Vinyasa Flow và các buổi tập nâng cao thể lực.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-amber">ROLE_TEACHER</span></td>
+          <td><b>teacher3</b></td>
+          <td>trongluc@vitayoga.vn</td>
+          <td><code>123456</code></td>
+          <td>HLV Hoàng Trọng Lực: Phụ trách các lớp Power Yoga và Yoga Cột Sống Khỏe cuối tuần.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-green">ROLE_CUSTOMER</span></td>
+          <td><b>student1</b> / an.nguyen</td>
+          <td>an.nguyen@gmail.com</td>
+          <td><code>123456</code></td>
+          <td>Học viên Nguyễn Văn An: Đã có lớp xác nhận (CONFIRMED), có thể viết đánh giá và đổi hồ sơ cá nhân.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-green">ROLE_CUSTOMER</span></td>
+          <td><b>student2</b> / mai.tran</td>
+          <td>mai.tran@gmail.com</td>
+          <td><code>123456</code></td>
+          <td>Học viên Trần Thị Mai: Đã có đơn đăng ký đang chờ duyệt (PENDING), có thể hủy đơn nếu muốn.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-green">ROLE_CUSTOMER</span></td>
+          <td><b>hung.le</b></td>
+          <td>hung.le@gmail.com</td>
+          <td><code>123456</code></td>
+          <td>Học viên Lê Văn Hùng: Tài khoản thành viên tiêu chuẩn tra cứu lịch và hồ sơ.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-lock" style="color: #991b1b;"></i> Ma Trận Phân Quyền Bảo Mật Spring Security 6</div>
+    </div>
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>URL Pattern (Đường dẫn)</th>
+          <th>Phương Thức</th>
+          <th>Quyền Yêu Cầu</th>
+          <th>Hành Vi Xử Lý Khi Vi Phạm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/admin/**</code>, <code>/api/admin/**</code></td>
+          <td>ALL</td>
+          <td><span class="pill pill-red">hasRole('ADMIN')</span></td>
+          <td>Chặn 403 Forbidden nếu là Giáo viên hoặc Học viên.</td>
+        </tr>
+        <tr>
+          <td><code>/teacher/**</code></td>
+          <td>ALL</td>
+          <td><span class="pill pill-amber">hasAnyRole('TEACHER', 'ADMIN')</span></td>
+          <td>Chặn 403 Forbidden nếu là Học viên; chuyển hướng <code>/teacher/login</code> nếu chưa đăng nhập.</td>
+        </tr>
+        <tr>
+          <td><code>/account/**</code>, <code>/registered-classes/**</code></td>
+          <td>ALL</td>
+          <td><span class="pill pill-green">hasAnyRole('CUSTOMER', 'ADMIN', 'TEACHER')</span></td>
+          <td>Yêu cầu đăng nhập tài khoản hợp lệ.</td>
+        </tr>
+        <tr>
+          <td><code>/</code>, <code>/classes/**</code>, <code>/teachers/**</code>, <code>/register</code></td>
+          <td>GET / POST</td>
+          <td><span class="pill pill-blue">permitAll()</span></td>
+          <td>Cho phép toàn bộ khách vãng lai và học viên truy cập công khai.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 6. CHƯƠNG III: CỔNG HỌC VIÊN & QUY TRÌNH TƯƠNG TÁC -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Chương III</span>
+      <h2 class="chapter-title">CỔNG HỌC VIÊN & QUY TRÌNH TƯƠNG TÁC (USER SITE)</h2>
+    </div>
+    <i class="fa-solid fa-person-running" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-door-open" style="color: #0284c7;"></i> 1. Đăng Nhập Học Viên & Khám Phá Trang Chủ</div>
+    </div>
+    <p style="font-size: 9.5pt; color: #475569; margin-bottom: 10px;">
+      Giao diện đăng nhập học viên được thiết kế riêng biệt với phong cách Zen Leaf xanh ngọc dịu mát, nút toggle ẩn hiện mật khẩu và chuyển hướng thông minh.
+    </p>
+    
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/account/login — Đăng Nhập Học Viên VITA</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/account_login.png" alt="Màn hình đăng nhập học viên">
+      <div class="screenshot-caption-box">
+        <b>Hình 3.1:</b> Màn hình đăng nhập tài khoản học viên (Leaf Theme) với bảo mật session an toàn.
+      </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/ — Trang Chủ Trung Tâm Yoga</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/home.png" alt="Trang chủ học viên">
+      <div class="screenshot-caption-box">
+        <b>Hình 3.2:</b> Trang chủ hiển thị số liệu lớp học thời gian thực, triết lý sống khỏe và khóa học nổi bật.
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-spa" style="color: #166534;"></i> 2. Tra Cứu Danh Mục Lớp Học & Giáo Viên Hướng Dẫn</div>
+    </div>
+    <p style="font-size: 9.5pt; color: #475569; margin-bottom: 10px;">
+      Học viên có thể tra cứu lịch tập, khung giờ, địa điểm phòng tập, số chỗ còn trống và xem chi tiết hồ sơ kinh nghiệm của từng giảng viên.
+    </p>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/classes — Danh Sách Lớp Học Yoga</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/classes.png" alt="Danh sách lớp học">
+      <div class="screenshot-caption-box">
+        <b>Hình 3.3:</b> Danh mục lớp học hiển thị sĩ số, học phí tháng và trạng thái còn chỗ theo thời gian thực.
+      </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/teachers — Đội Ngũ Giảng Viên Yoga</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/teachers.png" alt="Đội ngũ giáo viên">
+      <div class="screenshot-caption-box">
+        <b>Hình 3.4:</b> Đội ngũ Master Yoga giàu kinh nghiệm kèm số năm thâm niên và các lớp đang phụ trách.
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-id-card" style="color: #0369a1;"></i> 3. Hồ Sơ Cá Nhân (Zen Forest UI) & Cơ Chế Đăng Xuất Ra Trang Chủ</div>
+    </div>
+    <p style="font-size: 9.5pt; color: #475569; margin-bottom: 10px;">
+      Học viên cập nhật thông tin họ tên, số điện thoại, địa chỉ nhận thông báo và đổi mật khẩu mới. Sidebar được tối ưu màu sắc xanh rừng sâu (Zen Forest), hoàn toàn không bị xung đột màu xanh tím cũ.
+    </p>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/account — Hồ Sơ Cá Nhân Học Viên</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/student_profile.png" alt="Hồ sơ học viên">
+      <div class="screenshot-caption-box">
+        <b>Hình 3.5:</b> Màn hình quản lý thông tin cá nhân và đổi mật khẩu bảo mật chuẩn BCrypt.
+      </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/registered-classes — Khóa Học Của Tôi</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/student_registered_classes.png" alt="Khóa học đã đăng ký">
+      <div class="screenshot-caption-box">
+        <b>Hình 3.6:</b> Theo dõi tiến độ duyệt đơn (PENDING / CONFIRMED) và chức năng đánh giá buổi học.
+      </div>
+    </div>
+
+    <div class="callout-box callout-success">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <b>Cơ Chế Đăng Xuất An Toàn Về Trang Chủ (Logout to Dashboard):</b> Khi người dùng bấm <b>Đăng xuất</b> tại menu hoặc sidebar, hệ thống tự động xóa sạch phiên làm việc `JSESSIONID`, đưa học viên về ngay Trang chủ (`http://localhost:8080/?logout`) kèm banner thông báo đăng xuất thành công màu xanh dương trang nhã.
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 7. CHƯƠNG IV: CỔNG GIÁO VIÊN YOGA -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Chương IV</span>
+      <h2 class="chapter-title">CỔNG GIÁO VIÊN YOGA (TEACHER WORKSPACE)</h2>
+    </div>
+    <i class="fa-solid fa-person-chalkboard" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-right-to-bracket" style="color: #b45309;"></i> 1. Đăng Nhập HLV Riêng Biệt & Dashboard Quản Lý Lớp</div>
+    </div>
+    <p style="font-size: 9.5pt; color: #475569; margin-bottom: 10px;">
+      Giáo viên truy cập qua cổng riêng <code>/teacher/login</code> với giao diện Split-Screen hiện đại. Sau khi đăng nhập, giáo viên vào Cổng làm việc <code>/teacher/dashboard</code> hiển thị độc quyền các lớp do chính mình phụ trách.
+    </p>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/teacher/login — Cổng Đăng Nhập Giáo Viên</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/teacher_login.png" alt="Đăng nhập giáo viên">
+      <div class="screenshot-caption-box">
+        <b>Hình 4.1:</b> Giao diện đăng nhập riêng biệt dành cho Huấn luyện viên Yoga (Split-screen Layout).
+      </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/teacher/dashboard — Cổng Làm Việc Giáo Viên</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/teacher_dashboard.png" alt="Teacher Dashboard">
+      <div class="screenshot-caption-box">
+        <b>Hình 4.2:</b> Danh sách các lớp học phụ trách, lối tắt đến Điểm danh, Đánh giá và Chi tiết lớp.
+      </div>
+    </div>
+
+    <div class="callout-box callout-info">
+      <b>3 Nghiệp Vụ Chuyên Biệt Dành Cho Giáo Viên:</b><br>
+      • <code>GET /teacher/classes/{id}</code>: Xem chi tiết sĩ số và danh sách toàn bộ học viên chính thức trong lớp.<br>
+      • <code>GET /teacher/classes/{id}/attendance</code>: Bảng điểm danh buổi tập từng học viên (Có mặt, Đi muộn, Vắng mặt) và lưu trực tiếp qua <code>POST /teacher/classes/{id}/attendance</code>.<br>
+      • <code>GET /teacher/classes/{id}/reviews</code>: Đọc toàn bộ đánh giá số sao (1-5★) và nhận xét chất lượng từ học viên lớp mình.
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 8. CHƯƠNG V: TRUNG TÂM QUẢN TRỊ HỆ THỐNG (ADMIN CONTROL) -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Chương V</span>
+      <h2 class="chapter-title">TRUNG TÂM QUẢN TRỊ HỆ THỐNG (ADMIN CONTROL)</h2>
+    </div>
+    <i class="fa-solid fa-gauge-high" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-chart-line" style="color: #15803d;"></i> 1. Dashboard Vận Hành Toàn Diện & Bộ Lọc Thời Gian Thực</div>
+    </div>
+    <p style="font-size: 9.5pt; color: #475569; margin-bottom: 10px;">
+      Dashboard quản trị tích hợp <b>Thanh công cụ lọc thời gian</b> (Hôm nay, 7 ngày qua, 30 ngày qua, Tháng này hoặc Khoảng ngày tùy chọn). Mọi số liệu thống kê KPIs, số đơn chờ duyệt, số đơn đã duyệt và <b>tổng doanh thu thực thu trong kỳ</b> được tính toán lại ngay lập tức.
+    </p>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/admin/dashboard — Trung Tâm Vận Hành & Phân Tích</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/admin_dashboard.png" alt="Admin Dashboard">
+      <div class="screenshot-caption-box">
+        <b>Hình 5.1:</b> Dashboard quản trị với Bộ lọc thời gian, thẻ KPIs thời gian thực, biểu đồ SVG doanh số và tăng trưởng.
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-filter" style="color: #0369a1;"></i> 2. Hệ Thống Bộ Lọc Đa Tiêu Chí Trên Toàn Bộ Màn Hình Quản Trị</div>
+    </div>
+    <p style="font-size: 9.5pt; color: #475569; margin-bottom: 10px;">
+      Tất cả các màn hình danh sách trong phân hệ quản trị đều được trang bị thanh tìm kiếm từ khóa và dropdown bộ lọc chuyên sâu:
+    </p>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/admin/classes — Quản Lý Lớp Học Yoga</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/admin_classes.png" alt="Quản lý lớp học">
+      <div class="screenshot-caption-box">
+        <b>Hình 5.2:</b> Quản lý lớp học kèm bộ lọc tìm kiếm theo Tên lớp/Địa điểm, lọc theo Giáo viên và lọc theo Lịch học.
+      </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/admin/registrations — Xét Duyệt Đơn Đăng Ký</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/admin_registrations.png" alt="Quản lý đơn đăng ký">
+      <div class="screenshot-caption-box">
+        <b>Hình 5.3:</b> Quản lý đơn đăng ký: Lọc trạng thái (Tất cả, PENDING, CONFIRMED, CANCELLED), Phê duyệt một chạm.
+      </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/admin/customers — Hồ Sơ Học Viên</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/admin_customers.png" alt="Quản lý học viên">
+      <div class="screenshot-caption-box">
+        <b>Hình 5.4:</b> Quản lý học viên: Thanh tìm kiếm họ tên, số điện thoại, email, địa chỉ và lọc theo Giới tính.
+      </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <div class="browser-header-mock">
+        <div class="browser-circle-dots"><span class="browser-dot b-red"></span><span class="browser-dot b-yellow"></span><span class="browser-dot b-green"></span></div>
+        <div class="browser-url-bar">http://localhost:8080/admin/teachers/1 — Chi Tiết Giảng Viên</div>
+      </div>
+      <img class="screenshot-visual" src="docs/screenshots/admin_teacher_detail.png" alt="Chi tiết giáo viên">
+      <div class="screenshot-caption-box">
+        <b>Hình 5.5:</b> Hồ sơ giáo viên: Hiển thị avatar sắc nét chuẩn UTF-8, số năm kinh nghiệm và danh sách lớp phụ trách.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 9. CHƯƠNG VI: QUY TRÌNH NGHIỆP VỤ & CÔNG THỨC CHIẾT KHẤU -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Chương VI</span>
+      <h2 class="chapter-title">QUY TRÌNH NGHIỆP VỤ & CÔNG THỨC CHIẾT KHẤU</h2>
+    </div>
+    <i class="fa-solid fa-diagram-project" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-calculator" style="color: #15803d;"></i> 1. Công Thức Tính Học Phí & Chiết Khấu Gói Tập Tự Động</div>
+    </div>
+    <p style="font-size: 9.5pt; color: #475569; margin-bottom: 10px;">
+      Khi học viên hoặc quản trị viên tạo đơn đăng ký, hệ thống tự động áp dụng công thức chiết khấu bậc thang theo thời hạn đăng ký nhằm khuyến khích học viên duy trì luyện tập lâu dài:
+    </p>
+
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Thời Hạn Đăng Ký</th>
+          <th>Tỷ Lệ Giảm Giá</th>
+          <th>Công Thức Tính Giá Cuối (Final Price)</th>
+          <th>Ví Dụ (Lớp 600.000 đ/tháng)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Gói 1 tháng</b></td>
+          <td><span class="pill pill-blue">0%</span></td>
+          <td><code>Giá gốc × 1</code></td>
+          <td><b>600.000 đ</b> (Tiêu chuẩn)</td>
+        </tr>
+        <tr>
+          <td><b>Gói 3 tháng</b></td>
+          <td><span class="pill pill-green">Giảm 5%</span></td>
+          <td><code>Giá gốc × 3 × (1 - 0.05)</code></td>
+          <td><b>1.710.000 đ</b> <i>(Tiết kiệm 90.000 đ)</i></td>
+        </tr>
+        <tr>
+          <td><b>Gói 6 tháng</b></td>
+          <td><span class="pill pill-green">Giảm 10%</span></td>
+          <td><code>Giá gốc × 6 × (1 - 0.10)</code></td>
+          <td><b>3.240.000 đ</b> <i>(Tiết kiệm 360.000 đ)</i></td>
+        </tr>
+        <tr>
+          <td><b>Gói 12 tháng</b></td>
+          <td><span class="pill pill-green">Giảm 20%</span></td>
+          <td><code>Giá gốc × 12 × (1 - 0.20)</code></td>
+          <td><b>5.760.000 đ</b> <i>(Tiết kiệm 1.440.000 đ)</i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-arrows-split-up-and-left" style="color: #0369a1;"></i> 2. Vòng Đời Trạng Thái Đơn Đăng Ký (Registration Lifecycle)</div>
+    </div>
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Trạng Thái</th>
+          <th>Ý Nghĩa Nghiệp Vụ</th>
+          <th>Hành Động Khả Dụng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill pill-amber">PENDING</span> (Chờ duyệt)</td>
+          <td>Học viên vừa gửi đơn đăng ký qua web. Chưa giữ chỗ chính thức.</td>
+          <td>• Admin bấm <b>Phê duyệt</b> để xác nhận học viên vào lớp.<br>• Học viên hoặc Admin có thể bấm <b>Hủy đơn</b>.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-green">CONFIRMED</span> (Đã duyệt)</td>
+          <td>Đơn đã được duyệt, học viên chính thức có tên trong danh sách lớp. Sĩ số lớp tự động trừ 1 chỗ trống.</td>
+          <td>• Giáo viên được phép điểm danh học viên trong các buổi học.<br>• Học viên được quyền viết đánh giá sao và gửi nhận xét.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-red">CANCELLED</span> (Đã hủy)</td>
+          <td>Đơn bị từ chối duyệt hoặc học viên tự hủy bỏ đơn.</td>
+          <td>Không tính vào sĩ số thực tế, lưu vết lịch sử trong hệ thống.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 10. CHƯƠNG VII: KIẾN TRÚC CƠ SỞ DỮ LIỆU & MÃ NGUỒN -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Chương VII</span>
+      <h2 class="chapter-title">KIẾN TRÚC CƠ SỞ DỮ LIỆU & MÃ NGUỒN</h2>
+    </div>
+    <i class="fa-solid fa-database" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-table" style="color: #15803d;"></i> 1. Cấu Trúc 7 Bảng Thực Thể JPA (JPA Entity Mapping)</div>
+    </div>
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Tên Bảng (Table)</th>
+          <th>Khóa Chính (PK)</th>
+          <th>Khóa Ngoại (FK)</th>
+          <th>Mô Tả Dữ Liệu & Vai Trò Trong Hệ Thống</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>users</code></td>
+          <td><code>id</code></td>
+          <td><code>teacher_id</code>, <code>customer_id</code></td>
+          <td>Lưu thông tin đăng nhập, tên hiển thị UTF-8, mật khẩu BCrypt, vai trò (admin, teacher, customer).</td>
+        </tr>
+        <tr>
+          <td><code>teachers</code></td>
+          <td><code>id</code></td>
+          <td>-</td>
+          <td>Hồ sơ giảng viên Yoga: Họ tên, số điện thoại, email, số năm kinh nghiệm, avatar.</td>
+        </tr>
+        <tr>
+          <td><code>classes</code></td>
+          <td><code>id</code></td>
+          <td><code>teacher_id</code></td>
+          <td>Lớp học Yoga: Tên lớp, khung giờ, lịch tập, phòng học, học phí gốc, sĩ số tối đa (quantity).</td>
+        </tr>
+        <tr>
+          <td><code>customers</code></td>
+          <td><code>id</code></td>
+          <td>-</td>
+          <td>Hồ sơ học viên: Họ tên, số điện thoại, email, giới tính, địa chỉ liên hệ.</td>
+        </tr>
+        <tr>
+          <td><code>registrations</code></td>
+          <td><code>id</code></td>
+          <td><code>customer_id</code>, <code>class_id</code></td>
+          <td>Đơn đăng ký lớp học: Gói tháng (1, 3, 6, 12), chiết khấu, giá cuối, trạng thái (PENDING/CONFIRMED).</td>
+        </tr>
+        <tr>
+          <td><code>attendances</code></td>
+          <td><code>id</code></td>
+          <td><code>registration_id</code></td>
+          <td>Sổ điểm danh từng buổi: Ngày tập, trạng thái (PRESENT: Có mặt, LATE: Muộn, ABSENT: Vắng).</td>
+        </tr>
+        <tr>
+          <td><code>class_reviews</code></td>
+          <td><code>id</code></td>
+          <td><code>class_id</code>, <code>customer_id</code></td>
+          <td>Đánh giá chất lượng lớp học: Điểm số từ 1 đến 5 sao và bình luận phản hồi của học viên.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-folder-tree" style="color: #0369a1;"></i> 2. Cấu Trúc Mã Nguồn Chuẩn Hóa Maven & Spring Boot 3</div>
+    </div>
+    <div class="code-display">
+Yoga-Java/
+├── pom.xml                                   <span class="code-cmt"># Khai báo dependency: Spring Boot 3.4.11, JPA, Security 6, Thymeleaf, MySQL</span>
+├── SYSTEM_DOCUMENTATION.pdf                 <span class="code-cmt"># Tài liệu xuất bản in ấn A4 chuẩn chỉnh (File hiện tại)</span>
+├── SYSTEM_DOCUMENTATION.html                 <span class="code-cmt"># Tài liệu tương tác đa tab trực quan</span>
+├── test_system_flows.js                     <span class="code-cmt"># Kịch bản kiểm thử tự động toàn diện 37 test cases</span>
+├── README.md                                 <span class="code-cmt"># Tài liệu tổng quan dự án</span>
+└── src/main/
+    ├── java/com/yoga/vita/
+    │   ├── config/DataInitializer.java       <span class="code-cmt"># Seeder tự động nạp tài khoản và dữ liệu mẫu chuẩn UTF-8</span>
+    │   ├── controller/
+    │   │   ├── WebController.java            <span class="code-cmt"># Điều hướng Người dùng: Trang chủ, Lớp, Đăng ký, Profile, Logout</span>
+    │   │   ├── AdminWebController.java       <span class="code-cmt"># Điều hướng Quản trị: Dashboard lọc ngày, CRUD Lớp, HLV, Học viên</span>
+    │   │   ├── TeacherWebController.java     <span class="code-cmt"># Cổng Giáo viên: Dashboard lịch dạy, Điểm danh, Đánh giá</span>
+    │   │   └── AuthController.java           <span class="code-cmt"># RESTful Authentication API</span>
+    │   ├── entity/                           <span class="code-cmt"># 7 Thực thể JPA: User, Teacher, YogaClass, Customer, Registration...</span>
+    │   ├── repository/                       <span class="code-cmt"># 7 Giao diện Spring Data JPA Repository</span>
+    │   └── security/SecurityConfig.java      <span class="code-cmt"># Cấu hình phân quyền Spring Security 6 & Logout redirect về '/'</span>
+    └── resources/
+        ├── static/                           <span class="code-cmt"># CSS (admin, style, account), JS, Images (authors/*.jpg)</span>
+        └── templates/                        <span class="code-cmt"># 38 giao diện Thymeleaf SSR (admin/, pages/, teacher/, components/)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- 11. CHƯƠNG VIII: BÁO CÁO BỘ KIỂM THỬ TỰ ĐỘNG (37/37 PASS - 100%) -->
+<!-- ====================================================================== -->
+<div class="page-break">
+  <div class="chapter-header">
+    <div>
+      <span class="chapter-badge">Chương VIII</span>
+      <h2 class="chapter-title">BÁO CÁO BỘ KIỂM THỬ TỰ ĐỘNG TOÀN DIỆN</h2>
+    </div>
+    <i class="fa-solid fa-vial-circle-check" style="font-size: 28px; color: #4ade80;"></i>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-card-header">
+      <div class="doc-card-title"><i class="fa-solid fa-circle-check" style="color: #15803d;"></i> Tổng Kết Kết Quả Kiểm Thử Khép Kín (Automated Testing Report)</div>
+    </div>
+    
+    <div class="callout-box callout-success" style="margin-bottom: 16px;">
+      <b style="font-size: 11pt;">KẾT QUẢ ĐẠT ĐƯỢC: 37 / 37 TEST CASES PASS HOÀN TOÀN (100% SUCCESS)</b><br>
+      Bộ kiểm thử tự động đã được lập trình khép kín bằng Node.js trong file <code>test_system_flows.js</code>, thực hiện gửi request HTTP thật, kiểm tra cookie session, mã HTTP status code và truy vấn trực tiếp cơ sở dữ liệu MySQL để xác minh độ tin cậy.
+    </div>
+
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Nhóm Kịch Bản Kiểm Thử</th>
+          <th>Số Ca Test</th>
+          <th>Các Bước Kiểm Tra Cụ Thể</th>
+          <th>Kết Quả Thực Tế</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>1. Xác thực tài khoản</b></td>
+          <td><span class="pill pill-green">2/2 PASS</span></td>
+          <td>Đăng nhập quản trị viên (admin/123456) và học viên (student1/123456), nhận JSESSIONID an toàn.</td>
+          <td><b style="color: #15803d;">100% ĐẠT</b></td>
+        </tr>
+        <tr>
+          <td><b>2. Dashboard & Bộ lọc ngày</b></td>
+          <td><span class="pill pill-green">5/5 PASS</span></td>
+          <td>Tải dashboard; Lọc thời gian thực theo Hôm nay, 7 ngày qua, 30 ngày qua và khoảng ngày tùy chỉnh.</td>
+          <td><b style="color: #15803d;">100% ĐẠT</b></td>
+        </tr>
+        <tr>
+          <td><b>3. CRUD Lớp học Yoga</b></td>
+          <td><span class="pill pill-green">7/7 PASS</span></td>
+          <td>Lọc lớp -> Tạo lớp mới -> Kiểm tra CSDL -> Sửa thông tin -> Xác nhận CSDL cập nhật -> Xóa lớp -> Kiểm tra sạch CSDL.</td>
+          <td><b style="color: #15803d;">100% ĐẠT</b></td>
+        </tr>
+        <tr>
+          <td><b>4. CRUD Giáo viên Yoga</b></td>
+          <td><span class="pill pill-green">7/7 PASS</span></td>
+          <td>Lọc kinh nghiệm -> Thêm giáo viên -> Kiểm tra CSDL -> Sửa hồ sơ -> Xác nhận CSDL -> Xóa giáo viên -> Kiểm tra sạch CSDL.</td>
+          <td><b style="color: #15803d;">100% ĐẠT</b></td>
+        </tr>
+        <tr>
+          <td><b>5. CRUD Học viên Yoga</b></td>
+          <td><span class="pill pill-green">7/7 PASS</span></td>
+          <td>Lọc giới tính -> Thêm học viên -> Kiểm tra CSDL -> Sửa địa chỉ/hồ sơ -> Xác nhận CSDL -> Xóa học viên -> Kiểm tra sạch CSDL.</td>
+          <td><b style="color: #15803d;">100% ĐẠT</b></td>
+        </tr>
+        <tr>
+          <td><b>6. Đặt lớp & Duyệt đơn</b></td>
+          <td><span class="pill pill-green">5/5 PASS</span></td>
+          <td>Học viên gửi đơn đăng ký -> Đơn tạo PENDING -> Admin phê duyệt -> Đơn chuyển CONFIRMED -> Học viên thấy lớp đã duyệt.</td>
+          <td><b style="color: #15803d;">100% ĐẠT</b></td>
+        </tr>
+        <tr>
+          <td><b>7. Cập nhật hồ sơ & Mật khẩu</b></td>
+          <td><span class="pill pill-green">4/4 PASS</span></td>
+          <td>Học viên cập nhật thông tin cá nhân -> Đổi mật khẩu mới -> Đăng nhập lại với mật khẩu mới -> Khôi phục mật khẩu mẫu.</td>
+          <td><b style="color: #15803d;">100% ĐẠT</b></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="code-display" style="margin-top: 14px;">
+<span class="code-cmt"># Lệnh tái hiện kiểm thử bất kỳ lúc nào:</span>
+<span class="code-cmd">node</span> <span class="code-val">test_system_flows.js</span>
+<span class="code-cmt">
+======================================================================
+📊 TỔNG KẾT KẾT QUẢ TEST: 37 PASSED / 37 TEST CASES (100% SUCCESS)
+🎉 TẤT CẢ CÁC TÍNH NĂNG VÀ NGHIỆP VỤ HOẠT ĐỘNG HOÀN HẢO!
+======================================================================</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

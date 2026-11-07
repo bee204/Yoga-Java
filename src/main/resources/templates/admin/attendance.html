@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điểm danh lớp học - VITA Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-shell.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body class="admin-body">
+    <div th:replace="~{layouts/admin_nav :: admin_nav}"></div>
+
+    <main class="admin-main" style="max-width: 900px; margin: 30px auto; padding: 0 20px;">
+        <div th:if="${success}" class="alert alert-success" style="background:#d4edda;color:#155724;padding:12px;margin:15px 0;border-radius:6px;">
+            <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <a th:href="${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER') ? '/teacher/dashboard' : '/admin/classes'}" style="color: #10372f; text-decoration: none; font-weight: 600;">
+                <i class="fa-solid fa-arrow-left"></i> <span th:text="${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER') ? 'Quay lại cổng giáo viên' : 'Quay lại danh sách lớp học'}">Quay lại</span>
+            </a>
+        </div>
+
+        <div style="background: white; border-radius: 14px; padding: 30px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); border: 1px solid #e2ece9; margin-bottom: 25px;">
+            <span style="color: #2e7d32; font-weight: 600; text-transform: uppercase; font-size: 13px;">Bảng điểm danh buổi tập</span>
+            <h1 style="color: #10372f; margin: 6px 0; font-size: 24px;" th:text="${class.name}">Tên lớp</h1>
+            <p style="color: #64748b; margin: 0; font-size: 14px;">
+                Lịch học: <strong th:text="${class.lichHoc}">Lịch</strong> | 
+                Khung giờ: <strong th:text="${class.startTime + ' - ' + class.endTime}">Giờ</strong>
+            </p>
+        </div>
+
+        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+            <h2 style="font-size: 16px; color: #10372f; margin-top: 0; margin-bottom: 15px;">Danh sách học viên chính thức (<span th:text="${registrations.size()}">0</span>)</h2>
+
+            <div th:if="${registrations.isEmpty()}" style="text-align: center; padding: 20px; color: #888;">
+                Chưa có học viên nào được duyệt trong lớp này.
+            </div>
+
+            <table th:if="${!registrations.isEmpty()}" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e2ece9; color: #64748b;">
+                        <th style="padding: 10px;">Mã đơn</th>
+                        <th style="padding: 10px;">Học viên</th>
+                        <th style="padding: 10px;">Số điện thoại</th>
+                        <th style="padding: 10px; text-align: right;">Ghi nhận điểm danh hôm nay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${registrations}" style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 12px 10px; font-weight: 600;" th:text="'#' + ${r.id}">#1</td>
+                        <td style="padding: 12px 10px;"><strong th:text="${r.customer != null ? r.customer.name : 'N/A'}">Tên</strong></td>
+                        <td style="padding: 12px 10px;" th:text="${r.customer != null ? r.customer.phone : 'N/A'}">0900000000</td>
+                        <td style="padding: 12px 10px; text-align: right;">
+                            <form method="POST" th:action="@{${currentUser != null && (currentUser.role == 'teacher' || currentUser.role == 'TEACHER') ? '/teacher/classes/' + class.id + '/attendance' : '/admin/classes/' + class.id + '/attendance'}}" style="display: inline-flex; gap: 8px;">
+                                <input type="hidden" name="registration_id" th:value="${r.id}">
+                                <select name="status" style="padding: 5px; border-radius: 4px; border: 1px solid #cce3de; font-size: 13px;">
+                                    <option value="PRESENT">Có mặt</option>
+                                    <option value="LATE">Đi muộn</option>
+                                    <option value="ABSENT">Vắng mặt</option>
+                                </select>
+                                <button type="submit" style="background: #10372f; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 600;">
+                                    Lưu
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

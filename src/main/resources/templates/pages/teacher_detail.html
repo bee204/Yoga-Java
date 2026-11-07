@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${teacher.name + ' - VITA Yoga Center'}">Chi tiết giáo viên</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/teachers.css}">
+    <link rel="stylesheet" th:href="@{/css/classes.css}">
+    <link rel="stylesheet" th:href="@{/css/login-chooser.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body>
+    <div th:replace="~{components/header :: header}"></div>
+
+    <main>
+        <div class="container" style="padding: 40px 0;">
+            <div style="margin-bottom: 25px;">
+                <a th:href="@{/teachers}" style="color: #10372f; text-decoration: none; font-weight: 600;">
+                    <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách giáo viên
+                </a>
+            </div>
+
+            <div style="background: white; border-radius: 16px; padding: 35px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); display: flex; gap: 30px; align-items: flex-start; margin-bottom: 40px;">
+                <div style="width: 140px; height: 140px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: #e8f5e9; display: flex; align-items: center; justify-content: center;">
+                    <img th:if="${teacher.avatar != null}" th:src="@{'/img/authors/' + ${teacher.avatar}}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <i th:if="${teacher.avatar == null}" class="fa-regular fa-user" style="font-size: 50px; color: #10372f;"></i>
+                </div>
+                <div>
+                    <span style="color: #2e7d32; font-weight: 600; text-transform: uppercase; font-size: 13px;">Giáo viên hướng dẫn</span>
+                    <h1 th:text="${teacher.name}" style="margin: 5px 0 12px 0; color: #10372f; font-size: 28px;">Tên giáo viên</h1>
+                    <p th:text="${teacher.description}" style="color: #4b635d; line-height: 1.6; margin-bottom: 20px;">Mô tả chi tiết...</p>
+                    <div style="display: flex; gap: 20px; font-size: 14px; color: #333;">
+                        <span><i class="fa-solid fa-award" style="color: #f59e0b;"></i> <strong th:text="${teacher.expYear}">3</strong> năm kinh nghiệm</span>
+                        <span><i class="fa-solid fa-phone" style="color: #10b981;"></i> <span th:text="${teacher.phone}">0900000000</span></span>
+                        <span><i class="fa-solid fa-envelope" style="color: #3b82f6;"></i> <span th:text="${teacher.email}">email</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="color: #10372f; margin-bottom: 20px;">Các lớp đang phụ trách (<span th:text="${teacherClasses.size()}">0</span>)</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+                <div th:each="cls : ${teacherClasses}" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid #e2ece9;">
+                    <h3 th:text="${cls.name}" style="margin-top: 0; color: #10372f;">Tên lớp</h3>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+                        <i class="fa-regular fa-calendar"></i> <span th:text="${cls.lichHoc}">Lịch học</span> | 
+                        <i class="fa-regular fa-clock"></i> <span th:text="${cls.startTime}">06:00</span>
+                    </p>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+                        <i class="fa-solid fa-location-dot"></i> <span th:text="${cls.location}">Địa điểm</span>
+                    </p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f0f0f0; padding-top: 12px;">
+                        <strong style="color: #2e7d32;" th:text="${#numbers.formatDecimal(cls.price, 0, 'POINT', 0, 'COMMA') + ' đ/tháng'}">500.000 đ</strong>
+                        <a th:href="@{'/classes/' + ${cls.id}}" style="background: #10372f; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 13px;">Xem lớp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{components/footer :: footer}"></div>
+</body>
+</html>

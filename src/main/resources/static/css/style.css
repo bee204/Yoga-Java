@@ -58,8 +58,8 @@ header h1 {
 }
 
 /* Navigation */
-nav {
-    background: #667eea;
+header nav {
+    background: transparent;
     padding: 0;
 }
 

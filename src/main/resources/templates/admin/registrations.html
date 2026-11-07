@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đơn đăng ký - VITA Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-shell.css}">
+    <link rel="stylesheet" th:href="@{/css/readability.css}">
+</head>
+<body class="admin-body">
+    <div th:replace="~{layouts/admin_nav :: admin_nav}"></div>
+
+    <main class="admin-main" style="max-width: 1200px; margin: 30px auto; padding: 0 20px;">
+        <div th:if="${success}" class="alert alert-success" style="background:#d4edda;color:#155724;padding:12px;margin:15px 0;border-radius:6px;">
+            <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="alert alert-error" style="background:#f8d7da;color:#721c24;padding:12px;margin:15px 0;border-radius:6px;">
+            <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <div>
+                <h1 style="color: #10372f; margin: 0 0 5px 0; font-size: 24px;">Danh sách đơn đăng ký học</h1>
+                <p style="color: #64748b; margin: 0; font-size: 14px;">Quản lý và xét duyệt các đơn đăng ký khóa học Yoga.</p>
+            </div>
+            
+            <!-- Filter & Action buttons -->
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <a th:href="@{/admin/registrations/create}" style="background:#10372f;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;margin-right:8px;">
+                    <i class="fa-solid fa-plus"></i> Tạo đơn đăng ký
+                </a>
+                <a th:href="@{/admin/registrations}" th:style="${currentStatus == 'ALL' ? 'background:#10372f;color:white;' : 'background:#e2ece9;color:#10372f;'} + 'padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;'">Tất cả</a>
+                <a th:href="@{/admin/registrations?status=PENDING}" th:style="${currentStatus == 'PENDING' ? 'background:#d97706;color:white;' : 'background:#fef3c7;color:#92400e;'} + 'padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;'">Chờ duyệt</a>
+                <a th:href="@{/admin/registrations?status=CONFIRMED}" th:style="${currentStatus == 'CONFIRMED' ? 'background:#16a34a;color:white;' : 'background:#dcfce7;color:#166534;'} + 'padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;'">Đã duyệt</a>
+                <a th:href="@{/admin/registrations?status=CANCELLED}" th:style="${currentStatus == 'CANCELLED' ? 'background:#dc2626;color:white;' : 'background:#fee2e2;color:#991b1b;'} + 'padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;'">Đã hủy</a>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #e2ece9;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e2ece9; color: #64748b;">
+                        <th style="padding: 12px 10px;">ID</th>
+                        <th style="padding: 12px 10px;">Học viên</th>
+                        <th style="padding: 12px 10px;">Lớp học</th>
+                        <th style="padding: 12px 10px;">Gói tập</th>
+                        <th style="padding: 12px 10px;">Học phí</th>
+                        <th style="padding: 12px 10px;">Trạng thái</th>
+                        <th style="padding: 12px 10px; text-align: right;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${registrations}" style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 14px 10px; font-weight: 600;" th:text="'#' + ${r.id}">#1</td>
+                        <td style="padding: 14px 10px;">
+                            <strong th:text="${r.customer != null ? r.customer.name : 'Khách vãng lai'}">Tên</strong>
+                            <div style="font-size: 12px; color: #888;" th:text="${r.customer != null ? r.customer.phone : ''}">0900000000</div>
+                        </td>
+                        <td style="padding: 14px 10px;" th:text="${r.yogaClass != null ? r.yogaClass.name : 'Lớp Yoga'}">Lớp</td>
+                        <td style="padding: 14px 10px;" th:text="${r.packageMonths + ' tháng'}">1 tháng</td>
+                        <td style="padding: 14px 10px; color: #16a34a; font-weight: 600;" th:text="${#numbers.formatDecimal(r.finalPrice, 0, 'POINT', 0, 'COMMA') + ' đ'}">500.000 đ</td>
+                        <td style="padding: 14px 10px;">
+                            <span th:if="${r.status == 'CONFIRMED'}" style="background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">ĐÃ DUYỆT</span>
+                            <span th:if="${r.status == 'PENDING'}" style="background: #fef9c3; color: #854d0e; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">CHỜ DUYỆT</span>
+                            <span th:if="${r.status == 'CANCELLED'}" style="background: #fee2e2; color: #b91c1c; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">ĐÃ HỦY</span>
+                        </td>
+                        <td style="padding: 14px 10px; text-align: right;">
+                            <div style="display: inline-flex; gap: 6px;">
+                                <form th:if="${r.status == 'PENDING'}" method="POST" th:action="@{'/admin/registrations/' + ${r.id} + '/approve'}" style="margin:0;">
+                                    <button type="submit" title="Phê duyệt đơn" style="background:#16a34a;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;"><i class="fa-solid fa-check"></i> Duyệt</button>
+                                </form>
+                                <form th:if="${r.status == 'PENDING'}" method="POST" th:action="@{'/admin/registrations/' + ${r.id} + '/reject'}" style="margin:0;">
+                                    <button type="submit" title="Từ chối đơn" style="background:#e11d48;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;"><i class="fa-solid fa-xmark"></i> Từ chối</button>
+                                </form>
+                                <a th:href="@{'/admin/registrations/' + ${r.id}}" title="Xem chi tiết" style="background:#e0f2fe;color:#0284c7;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:12px;"><i class="fa-regular fa-eye"></i></a>
+                                <a th:href="@{'/admin/registrations/' + ${r.id} + '/edit'}" title="Chỉnh sửa" style="background:#f1f5f9;color:#334155;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:12px;"><i class="fa-solid fa-pen-to-square"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
